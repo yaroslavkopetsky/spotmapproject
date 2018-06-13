@@ -1,0 +1,179 @@
+﻿
+@model SpotMapProject.Models.DetailsViewModel.MyViewModel
+<head>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #img {
+            height: 300px; /* The height is 400 pixels */
+            width: 300px; /* The width is the width of the web page */
+        }
+    </style>
+</head>
+<div>
+    <h4>AspNetSpot</h4>
+    <hr />
+    @if (Model.editor)
+    {
+        using (Html.BeginForm("UpdateSpot", "Spot", FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <p>
+
+                @Html.Hidden("id", Model.SpotData.Id)
+
+            </p>
+
+            <input type="submit" value="Update Spot" />
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("AddEditRequest", "Users", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <p>
+
+                @Html.Hidden("id", Model.SpotData.Id)
+
+            </p>
+
+            <input type="submit" value="Send Request" />
+        }
+    }
+
+    <hr />
+    @if (Model.favorite)
+    {
+        using (Html.BeginForm("AddSpotToFavorites", "Spot", FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <p>
+
+                @Html.Hidden("id", Model.SpotData.Id)
+
+            </p>
+
+            <input type="submit" value="Delete From Favorites" />
+        }
+    }
+    else
+    {
+        using (Html.BeginForm("AddSpotToFavorites", "Spot", FormMethod.Get))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true)
+
+            <p>
+
+                @Html.Hidden("id", Model.SpotData.Id)
+
+            </p>
+
+            <input type="submit" value="Add Spot To Favorites" />
+        }
+
+
+
+    }
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dd>
+            @foreach (string p in Model.photos)
+            {
+                <hr />
+                <img src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img" />
+                <hr />
+            }
+        </dd>
+
+        <dt>
+            <p> Title :</p>
+        </dt>
+
+        <dd>
+            <p> @Model.SpotData.title</p>
+        </dd>
+
+        <dt>
+            <p> Description: </p>
+        </dt>
+
+        <dd>
+            <p> @Model.SpotData.desc</p>
+        </dd>
+
+        <dt>
+            <p> Latitude :</p>
+        </dt>
+
+        <dd>
+            <p> @Model.SpotData.lat.ToString()</p>
+        </dd>
+
+        <dt>
+            <p> Longtitude: </p>
+        </dt>
+
+        <dd>
+            <p> @Model.SpotData.lon.ToString()</p>
+        </dd>
+
+    </dl>
+
+
+
+    @using (Html.BeginForm("RateSpot", "Spot", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <p>
+        <p>Rate Spot(0-100)</p>  @Html.TextBox("value");
+
+        @Html.Hidden("id", Model.SpotData.Id)
+
+
+        </p>
+
+        <input type="submit" value="Rate" />
+    }
+    <p>Rating:@Model.Rating</p>
+    <hr />
+    @using (Html.BeginForm("AddComment", "Spot", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+
+        <p>
+            @Html.TextArea("text", null, new { @class = "form-control" })
+            @Html.Hidden("id", Model.SpotData.Id)
+
+        </p>
+
+        <input type="submit" value="Add Comment" />
+    }
+    <hr>
+    <h1>Comments</h1>
+
+    @for (int i = 0; i < Model.SpotComments.Count; i++)
+    {
+        <hr />
+        <h4><b>@Model.Usernames[i]</b> </h4> <p><i>@Model.Date[i] </i></p>
+        <br />
+        <p>@Model.SpotComments[i]</p>
+        <hr />
+    }
+    <hr />
+
+</div>
+
+
+
+

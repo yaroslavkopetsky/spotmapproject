@@ -1,0 +1,16 @@
+﻿@model SpotMapProject.Models.AspNetSpotEdit
+<hr />
+@if (ViewBag.Request == "Already Sent!")
+{
+
+    <h1 style="color:crimson;">Request Status:@ViewBag.Request</h1>
+}
+else
+{
+
+    <h1 style="color:green;">Request Status:@ViewBag.Request</h1>
+
+}
+
+<hr />
+

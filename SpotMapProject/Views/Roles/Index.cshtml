@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Roles Listing </h2>
+
+@Html.ActionLink("Create New Role", "Create") | @Html.ActionLink("Manage User Role", "ManageUserRoles")
+<hr />
+<div>
+    @foreach (var role in Model)
+    {
+        <p>
+            <strong>@role.Name | </strong>
+            <span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span> |
+            @Html.ActionLink("Edit", "Edit", new { roleName = @role.Name })
+        </p>
+    }
+</div>
+
+<hr />
+<h2>Manage Spots</h2>
+@Html.ActionLink("Show Spots", "ShowSpots") | @Html.ActionLink("Add Spot", "AddSpot", "Spot")|  @Html.ActionLink("Show Spot Requests", "ShowSpotRequests", "Spot") @if (ViewBag.SpotRequests != 0)
+{<span class="badge" id="blinker">@ViewBag.SpotRequests</span>}
+<hr />
+<hr />
+<h2>Manage Users</h2>
+@Html.ActionLink("Show Users", "ShowUsers", "Users") | @Html.ActionLink("Add User", "AddUser", "Users")|
+@Html.ActionLink("Show Users Edit Request", "ShowEditRequests", "Users") @if (ViewBag.EditRequests != 0){ <span class="badge" id="blinker1">@ViewBag.EditRequests</span>}
+
+<script>
+    function blinker() {
+        $('#blinker').fadeOut(500);
+        $('#blinker').fadeIn(500);
+    }
+
+   
+    function blinker1() {
+        $('#blinker1').fadeOut(500);
+        $('#blinker1').fadeIn(500);
+    }
+
+    setInterval(blinker, 1000);
+    setInterval(blinker1, 1000);
+</script>
+
+
+<hr />

@@ -1,0 +1,71 @@
+﻿@model IEnumerable<SpotMapProject.Models.AspNetSpot>
+
+<p>
+    @Html.ActionLink("Create New Spot", "AddSpot","Spot")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.title)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.lat)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.lon)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.visible)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.@public)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.added)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.author)
+        </th>
+        
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+
+    <tr style='background-color: @(item.added == true ? "#d8ffd7" : "#ffd7d7") ;background-color: @(item.@public == false ? "#f1d3ff": (item.added == true ? (item.visible == true ? "#d8ffd7" : "#ffd7d7"): "#ffd7d7") );'>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.title)
+        </td>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.lat)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lon)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.visible)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.@public)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.added)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.author)
+        </td>
+       
+        <td>
+            <a href="/Spot/UpdateSpot/@item.Id"> Edit</a>|
+            <a href="/Spot/Details/@item.Id"> Details</a>|
+            <a href="/Spot/DeleteSpot/@item.Id"> Delete</a>|
+            <a href="/Spot/ShowSpot?id=@item.Id"> Show on Map</a>
+        </td>
+    </tr>
+    }
+
+</table>
