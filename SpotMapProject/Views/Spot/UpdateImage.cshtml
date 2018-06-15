@@ -1,0 +1,10 @@
+﻿@model SpotMapProject.Models.AspNetSpotPhoto
+<hr />
+@using (Html.BeginForm("UpdateImage", "Spot", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <label for="file">Filename:</label>
+    <input type="file" name="file" id="file" />
+    @Html.Hidden("spot_id", Request.Params["spot_id"]);
+    @Html.Hidden("index", Request.Params["index"]);
+    <input type="submit" value="Save" class="btn btn-default" />
+}

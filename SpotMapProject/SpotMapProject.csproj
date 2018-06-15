@@ -208,6 +208,24 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AspNetActionControl.cs">
+      <DependentUpon>AspNetActionControlModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetActionControlModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AspNetActionControlModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetActionControlModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AspNetActionControlModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetActionControlModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AspNetActionControlModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Models\AspNetPhotoModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -368,6 +386,16 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Models\AspNetActionControlModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AspNetActionControlModel.edmx</DependentUpon>
+      <LastGenOutput>AspNetActionControlModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\AspNetActionControlModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AspNetActionControlModel.edmx</DependentUpon>
+      <LastGenOutput>AspNetActionControlModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Models\AspNetPhotoModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>AspNetPhotoModel.edmx</DependentUpon>
@@ -509,6 +537,13 @@
     <Content Include="Models\FavoriteSpotModel.edmx.diagram">
       <DependentUpon>FavoriteSpotModel.edmx</DependentUpon>
     </Content>
+    <EntityDeploy Include="Models\AspNetActionControlModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AspNetActionControlModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\AspNetActionControlModel.edmx.diagram">
+      <DependentUpon>AspNetActionControlModel.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -578,6 +613,7 @@
     <Content Include="Views\Users\AddEditRequest.cshtml" />
     <Content Include="Views\Spot\ShowFavoriteSpots.cshtml" />
     <Content Include="Views\Spot\ShowSpot.cshtml" />
+    <Content Include="Views\Spot\UpdateImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

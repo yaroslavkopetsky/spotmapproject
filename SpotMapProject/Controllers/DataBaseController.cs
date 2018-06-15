@@ -25,6 +25,7 @@ namespace SpotMapProject.Controllers
         private EditSpotEntity spotreq_entity = new EditSpotEntity();
         private AspNetPhotoEntity spotphoto_entity = new AspNetPhotoEntity();
         private FavoriteSpotEntity spotfav_entity = new FavoriteSpotEntity();
+        private ActionControlEntities action_ctrl = new ActionControlEntities();
        public void AddSpot(AspNetSpot model)//Add Spot As Admin or moder
         {
 
@@ -567,8 +568,40 @@ namespace SpotMapProject.Controllers
             {
                 return false;
             }
+        }
+
+
+        public void AddNewAction(string Text)
+        {
+            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            AspNetActionControl model = new AspNetActionControl();
+            model.Id = GetLastActionID() + 1;
+            model.username = user.UserName;
+            model.action = Text;
+            action_ctrl.AspNetActionControls.Add(model);
+            action_ctrl.SaveChanges();
 
         }
+
+        public int GetLastActionID()
+        {
+
+            int max = Convert.ToInt32(action_ctrl.AspNetActionControls.Max(p => p.Id));
+            return max;
+        }
+
+        public void UpdatePhoto(AspNetSpotPhoto model, string path)
+        {
+            model = spotphoto_entity.AspNetSpotPhotos.Find(model.Id);
+            model.path = path;
+            spotphoto_entity.SaveChanges();
+        }
+
+        public List<AspNetSpotPhoto> GetAllSpotPhotosToListById(string id)
+        {
+            List<AspNetSpotPhoto> models = spotphoto_entity.AspNetSpotPhotos.Where(x => x.spot_id == id).ToList();
+            return models;
+        }
     }
-   
+
 }
