@@ -1,11 +1,45 @@
 ﻿@model SpotMapProject.Models.AspNetSpot
 
-@using (Html.BeginForm("UpdateSpot","Spot",FormMethod.Post))
+<style>
+
+ #img {
+            height: 300px; /* The height is 400 pixels */
+            width: 300px; /* The width is the width of the web page */
+        }
+    </style>
+
+@using (Html.BeginForm("UpdateSpot", "Spot", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
     <h4>AspNetSpot</h4>
+    <hr />
+    @{int i = 0;
+        int id = 0;
+        string spot_ID = "";
+            
+    }
+    @foreach (string p in ViewBag.PhotoPaths)
+    {
+        
+
+            <hr />
+            <a href="@Url.Content("~/Content/SpotImages/" + p)"> <img src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img" /></a>
+            <hr />
+            
+                        id = ViewBag.PhotoID[i];
+                        Html.Hidden("id", id);
+                      
+            spot_ID = ViewBag.SpotID;
+                        Html.Hidden("spot_id", spot_ID);
+            <a href="@Url.Content("~/Spot/UpdateImage?spot_id="+ViewBag.SpotId+"&img_id="+i)">Update Image</a>
+        i++;
+
+    }
+    <hr />
+    <label for="file">Add Images:</label>
+    <input type="file" class="multiple" name="files" multiple />
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.Id)
@@ -58,7 +92,7 @@
             @Html.ValidationMessageFor(model => model.@public, "", new { @class = "text-danger" })
         </div>
     </div>
-    
+
     @if (User.IsInRole("admin") || User.IsInRole("moder"))
     {
         <div class="form-group">

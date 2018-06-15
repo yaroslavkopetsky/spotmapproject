@@ -121,7 +121,12 @@ namespace SpotMapProject.Controllers
             string[] rolesArray;
             if (!string.IsNullOrWhiteSpace(UserName))
             {
+                string us = UserName;
+                string[] roles = System.Web.Security.Roles.GetRolesForUser(us);
                 rolesArray = Roles.GetRolesForUser();
+                ApplicationDbContext db = new ApplicationDbContext();
+             
+               // RoleName = roles.Where(j => j.Id == MS.Roles.FirstOrDefault().RoleId).Select(a => a.Name).FirstOrDefault();
                 /*
                 ApplicationUser user = context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
                 var account = new AccountController();
@@ -130,15 +135,15 @@ namespace SpotMapProject.Controllers
 
              */
 
-               
-                var list = rolesArray.ToList();
+
+                var list = roles.ToList();
                 ViewBag.Roles = list;
-  
-            
+
+                //RolePrincipal r = (RolePrincipal)User;
+                //rolesArray = r.GetRoles();
+               
 
 
-
-                
             }
 
             return View("ManageUserRoles");

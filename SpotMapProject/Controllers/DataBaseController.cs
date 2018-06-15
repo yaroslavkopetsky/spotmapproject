@@ -25,7 +25,9 @@ namespace SpotMapProject.Controllers
         private EditSpotEntity spotreq_entity = new EditSpotEntity();
         private AspNetPhotoEntity spotphoto_entity = new AspNetPhotoEntity();
         private FavoriteSpotEntity spotfav_entity = new FavoriteSpotEntity();
-       public void AddSpot(AspNetSpot model)//Add Spot As Admin or moder
+        private ActionControlEntity actionC_entity = new ActionControlEntity();
+
+        public void AddSpot(AspNetSpot model)//Add Spot As Admin or moder
         {
 
             ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
@@ -205,10 +207,12 @@ namespace SpotMapProject.Controllers
             return usernames;
         }
 
-        public void RateSpot(string id,string value)
+        public void RateSpot(string id,string val)
         {
-            if (value != null)
+            int value;
+            if (val != null && int.TryParse(val, out value))
             {
+              
                 ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
 
@@ -218,7 +222,7 @@ namespace SpotMapProject.Controllers
                     int ID = Convert.ToInt32(id);
 
                     AspNetSpotRating spotrat = spotrat_entity.AspNetSpotRatings.FirstOrDefault(x => x.spot_id == ID && x.username == user.UserName);
-                    spotrat.value = Convert.ToInt32(value);
+                    spotrat.value = Convert.ToInt32(val);
 
                     spotrat_entity.SaveChanges();
 
@@ -230,7 +234,7 @@ namespace SpotMapProject.Controllers
                     rating.Id = GetLastRatingID() + 1;
                     rating.spot_id = Convert.ToInt32(id);
                     rating.username = user.UserName;
-                    rating.value = Convert.ToInt32(value);
+                    rating.value = Convert.ToInt32(val);
                     spotrat_entity.AspNetSpotRatings.Add(rating);
                     spotrat_entity.SaveChanges();
                 }
@@ -508,6 +512,14 @@ namespace SpotMapProject.Controllers
             return photos;
         }
 
+        public List<int> GetSpotPhotosId(string spotID)
+        {
+            
+            return (spotphoto_entity.AspNetSpotPhotos.Where(x => x.spot_id == spotID).Select(x => x.Id).ToList());
+        }
+
+
+
         public void AddToFavoriteSpot(string id)
         {
             AspNetSpotFavorite model = new AspNetSpotFavorite();
@@ -569,6 +581,42 @@ namespace SpotMapProject.Controllers
             }
 
         }
+
+        public void AddAction(string action_Text)
+        {
+            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+            AspNetActionControl model = new AspNetActionControl();
+            model.Id = GetLastActionID() + 1;
+            model.username = user.UserName;
+            model.action = action_Text;
+            actionC_entity.AspNetActionControls.Add(model);
+            actionC_entity.SaveChanges();
+
+
+        }
+
+        public int GetLastActionID()
+        {
+
+            int max = Convert.ToInt32(actionC_entity.AspNetActionControls.Max(p => p.Id));
+            return max;
+        }
+
+
+        public void UpdateImage(AspNetSpotPhoto model,string img_path)
+        {
+            AspNetSpotPhoto upd_model = spotphoto_entity.AspNetSpotPhotos.FirstOrDefault(x=>x.Id == model.Id);
+            upd_model.path = img_path;
+            spotphoto_entity.SaveChanges();
+        }
+
+        public List<AspNetSpotPhoto> GetPhotoIDBySpotID(string spot)
+        {
+            List<AspNetSpotPhoto> photos = spotphoto_entity.AspNetSpotPhotos.Where(x => x.spot_id == spot).ToList();
+            return photos;
+        }
+
     }
-   
+      
+        
 }
