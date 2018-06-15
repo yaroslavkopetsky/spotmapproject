@@ -16,7 +16,6 @@ namespace SpotMapProject.Models
             public string Rating = "";
             public bool editor;
             public List<string> photos = new List<string>();
-            public List<int> photos_id = new List<int>();
             public bool favorite;
         }
     }

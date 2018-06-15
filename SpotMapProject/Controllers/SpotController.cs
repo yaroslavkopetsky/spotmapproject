@@ -65,7 +65,7 @@ namespace SpotMapProject.Controllers
 
                 dbcon.AddSpot(model);
                 dbcon.AllowEdit(dbcon.GetLastSpotID().ToString());
-                dbcon.AddAction("Added spot with id " + model.Id);
+
             
             return View(model);
         }
@@ -93,10 +93,9 @@ namespace SpotMapProject.Controllers
                 dbcon.AddPhotoPath(Convert.ToString(dbcon.GetLastSpotID() + 1), "default.png");
             }
 
-                dbcon.AddSpotRequest(model);
+                    dbcon.AddSpotRequest(model);
                 dbcon.AllowEdit(dbcon.GetLastSpotID().ToString());
-                dbcon.AddAction("Requested spot with id " + model.Id);
-
+            
             return View();
         }
 
@@ -126,16 +125,12 @@ namespace SpotMapProject.Controllers
             }
             det_view_model.SpotData = spot;
             det_view_model.SpotComments = dbcon.GetSpotCommentsByID(id);
-            det_view_model.SpotComments.Reverse();
             det_view_model.Usernames = dbcon.GetCommentUsernameByID(id);
-            det_view_model.Usernames.Reverse();
             det_view_model.Date = dbcon.GetSpotCommentDateByID(id);
-            det_view_model.Date.Reverse();
             det_view_model.Rating = Convert.ToString(dbcon.GetSpotRatingValueByID(id));
             det_view_model.editor = dbcon.CheckUserEditor(id);
             det_view_model.photos= dbcon.GetAllSpotPhotosByID(id);
             det_view_model.favorite = dbcon.CheckInFavoriteByID(id);
-            det_view_model.photos_id = dbcon.GetSpotPhotosId(id);
             return View(det_view_model);
         }
 
@@ -151,10 +146,8 @@ namespace SpotMapProject.Controllers
         [Authorize]
         public ActionResult RateSpot(string id, string value)
         {
-            if (ModelState.IsValid)
-            {
-                dbcon.RateSpot(id, value);
-            }
+
+            dbcon.RateSpot(id, value);
 
             return RedirectToAction("Details", new { id = id }); ;
         }
@@ -170,9 +163,7 @@ namespace SpotMapProject.Controllers
        public ActionResult AcceptRequest(string id)
         {
             dbcon.AcceptSpotRequest(id);
-            dbcon.AddAction("Accepted spot request id " + id);
             return RedirectToAction("ShowSpotRequests");
-
         }
         [HttpGet]   
         public ActionResult UpdateSpot(string id)
@@ -184,49 +175,18 @@ namespace SpotMapProject.Controllers
             {
                 return View("Error");
             }
+           
 
-            List<string> photo_paths = dbcon.GetAllSpotPhotosByID(id);
-            List<int> photo_id = dbcon.GetSpotPhotosId(id);
-          
-            ViewBag.PhotoPaths = photo_paths;
-            ViewBag.PhotoID = photo_id;
-            ViewBag.Count = photo_id.Count();
-            ViewBag.SpotId = id;
-
-            det_view_model.SpotData = spot;
-            det_view_model.SpotComments = dbcon.GetSpotCommentsByID(id);
-            det_view_model.Usernames = dbcon.GetCommentUsernameByID(id);
-            det_view_model.Date = dbcon.GetSpotCommentDateByID(id);
-            det_view_model.Rating = Convert.ToString(dbcon.GetSpotRatingValueByID(id));
-            det_view_model.editor = dbcon.CheckUserEditor(id);
-           // det_view_model.photos = dbcon.GetAllSpotPhotosByID(id);
-            det_view_model.favorite = dbcon.CheckInFavoriteByID(id);
-           // det_view_model.photos_id = dbcon.GetSpotPhotosId(id);
-            
             return View(spot);
         }
 
         [HttpPost]
-        public ActionResult UpdateSpot(AspNetSpot model, HttpPostedFileBase[] files)
+        public ActionResult UpdateSpot(AspNetSpot model)
         {
-            if (files[0] != null)
-            {
-                foreach (HttpPostedFileBase file in files)
-                {
 
-
-                    string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
-                                               Path.GetFileName(file.FileName));
-                    file.SaveAs(path);
-                    ViewBag.Message = "File uploaded successfully";
-                    dbcon.AddPhotoPath(Convert.ToString(model.Id), file.FileName);
-
-                }
-            }
-          
-
-            dbcon.UpdateSpot(model);
-            dbcon.AddAction("Updated Spot id  " + model.Id);
+           
+                dbcon.UpdateSpot(model);
+            
             return RedirectToAction("Map","Home");
         }
 
@@ -235,7 +195,7 @@ namespace SpotMapProject.Controllers
         {
 
             dbcon.DeleteSpot(id);
-            dbcon.AddAction("Deleted Spot id =" + id);
+
             return RedirectToAction("ShowSpots","Roles");
         }
 
@@ -255,7 +215,7 @@ namespace SpotMapProject.Controllers
             // Show FavSpots
 
 
-            return View(dbcon.GetFavoriteSpotList()); 
+            return View(dbcon.GetFavoriteSpotList());
         }
 
         [HttpGet]
@@ -266,34 +226,5 @@ namespace SpotMapProject.Controllers
         }
 
 
-        [HttpGet]
-        public ActionResult UpdateImage()
-        {
-            
-
-            return View();
-        }
-
-
-
-
-        [HttpPost]
-        public ActionResult UpdateImage(string img_id, HttpPostedFileBase file,string spot_id)
-        {
-            if (file != null)
-            {
-            
-                string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
-                                           Path.GetFileName(file.FileName));
-                file.SaveAs(path);
-                ViewBag.Message = "File uploaded successfully";
-                List<AspNetSpotPhoto> photos = dbcon.GetPhotoIDBySpotID(spot_id);
-                int ID = Convert.ToInt32(img_id);
-               dbcon.UpdateImage(photos.ElementAt(ID), file.FileName);
-               
-            }
-
-            return RedirectToAction("UpdateSpot/"+spot_id);
-        }
     }
 }

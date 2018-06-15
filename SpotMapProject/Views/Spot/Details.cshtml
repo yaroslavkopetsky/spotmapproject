@@ -88,7 +88,7 @@
             @foreach (string p in Model.photos)
             {
                 <hr />
-               <a href="@Url.Content("~/Content/SpotImages/" + p)"> <img src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img" /></a>
+                <img src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img" />
                 <hr />
             }
         </dd>
