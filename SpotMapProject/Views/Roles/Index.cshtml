@@ -1,32 +1,104 @@
 ﻿@model IEnumerable<Microsoft.AspNet.Identity.EntityFramework.IdentityRole>
-@{
-    ViewBag.Title = "Index";
+
+<head>
+    <link href="../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../Content/Bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="../Content/Bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
+
+
+
+    <style>
+
+        p {
+            font-size: 18px; /* 14px/16=0.875em */
+        }
+    </style>
+
+</head>
+
+
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="@Url.Content("~/Home/Index")">SpotMap</a>
+        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))
+                    {
+
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Roles/Index")">Administrating <img src="@Url.Content("~/Content/Icons/admin.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+
+
+                    }
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowFavoriteSpots")">Favorites <img src="@Url.Content("~/Content/Icons/favorite.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                }
+                <li class="nav-item mx-0 mx-lg-1">
+                    @Html.Partial("_LoginPartial");
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@if (Context.User.IsInRole("admin"))
+{
+    <h2>Roles Listing </h2>
+    <p>@Html.ActionLink("Create New Role", "Create") | @Html.ActionLink("Manage User Role", "ManageUserRoles")</p>
+    <hr />
+    <div>
+        @foreach (var role in Model)
+        {
+            <p>
+                <strong>@role.Name | </strong>
+                <span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span> |
+                @Html.ActionLink("Edit", "Edit", new { roleName = @role.Name })
+            </p>
+        }
+    </div>
+
+    <hr />
+    
 }
-
-<h2>Roles Listing </h2>
-
-@Html.ActionLink("Create New Role", "Create") | @Html.ActionLink("Manage User Role", "ManageUserRoles")
-<hr />
-<div>
-    @foreach (var role in Model)
-    {
-        <p>
-            <strong>@role.Name | </strong>
-            <span onclick="return confirm('Are you sure to delete?')"><a href="/Roles/Delete?RoleName=@role.Name" class="delLink" style="color:red;">Delete</a></span> |
-            @Html.ActionLink("Edit", "Edit", new { roleName = @role.Name })
-        </p>
-    }
-</div>
-
-<hr />
-<h2>Manage Spots</h2>
-@Html.ActionLink("Show Spots", "ShowSpots") | @Html.ActionLink("Add Spot", "AddSpot", "Spot")|  @Html.ActionLink("Show Spot Requests", "ShowSpotRequests", "Spot") @if (ViewBag.SpotRequests != 0)
-{<span class="badge" id="blinker">@ViewBag.SpotRequests</span>}
+    <h2>Manage Spots</h2>
+<p>
+    @Html.ActionLink("Show Spots", "ShowSpots") | @Html.ActionLink("Add Spot", "AddSpot", "Spot")|  @Html.ActionLink("Show Spot Requests", "ShowSpotRequests", "Spot")@if (ViewBag.SpotRequests != 0)
+    {<span class="badge" id="blinker">@ViewBag.SpotRequests</span>}
+</p>
 <hr />
 <hr />
 <h2>Manage Users</h2>
-@Html.ActionLink("Show Users", "ShowUsers", "Users") | @Html.ActionLink("Add User", "AddUser", "Users")|
-@Html.ActionLink("Show Users Edit Request", "ShowEditRequests", "Users") @if (ViewBag.EditRequests != 0){ <span class="badge" id="blinker1">@ViewBag.EditRequests</span>}
+<p>
+    @Html.ActionLink("Show Users", "ShowUsers", "Users") | @Html.ActionLink("Add User", "AddUser", "Users")|
+    @Html.ActionLink("Show Users Edit Request", "ShowEditRequests", "Users") @if (ViewBag.EditRequests != 0)
+    {
+        <span class="badge" id="blinker1">@ViewBag.EditRequests</span>}
+</p>
+
 
 <script>
     function blinker() {
@@ -34,7 +106,7 @@
         $('#blinker').fadeIn(500);
     }
 
-   
+
     function blinker1() {
         $('#blinker1').fadeOut(500);
         $('#blinker1').fadeIn(500);
@@ -43,6 +115,19 @@
     setInterval(blinker, 1000);
     setInterval(blinker1, 1000);
 </script>
+<!-- Bootstrap core JavaScript -->
+<script src="../Content/Bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="../Content/Bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+<!-- Plugin JavaScript -->
+<script src="../Content/Bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="../Content/Bootstrap/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+<!-- Contact Form JavaScript -->
+<script src="../Content/Bootstrap/js/jqBootstrapValidation.js"></script>
+<script src="../Content/Bootstrap/js/contact_me.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="../Content/Bootstrap/js/freelancer.min.js"></script>
 
 <hr />

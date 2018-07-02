@@ -1,31 +1,257 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿@model SpotMapProject.Models.IndexViewModel
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+
+
+        p {
+            font-size: 10px;
+        }
+
+        .badge {
+            font-size: 20px;
+        }
+
+
+        .badge-error {
+            background-color: #b94a48;
+            font-size: 14px;
+        }
+
+            .badge-error:hover {
+                background-color: #953b39;
+            }
+    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Home</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../Content/Bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="../Content/Bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="@Url.Content("~/Home/Index")">SpotMap</a>
+            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+                        if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))
+                        {
+
+                            <li class="nav-item mx-0 mx-lg-1">
+                                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Roles/Index")">
+                                    Administrating <img src="@Url.Content("~/Content/Icons/admin.png")" alt="IMAGES" id="img" /> @if (ViewBag.Requests != 0)
+                                    {<span class="badge badge-error" id="blinker">@ViewBag.Requests</span>}
+                                </a>
+                            </li>
+
+
+                        }
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowFavoriteSpots")">Favorites <img src="@Url.Content("~/Content/Icons/favorite.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+                    }
+                    <li class="nav-item mx-0 mx-lg-1">
+                        @Html.Partial("_LoginPartial");
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="masthead bg-primary text-white text-center">
+        <div class="container">
+            <img class="img-fluid mb-5 d-block mx-auto" src="../Content/Bootstrap/img/earth-logo-128.png" alt="">
+            <h1 class="text-uppercase mb-0">Spot Map</h1>
+            <hr class="star-light">
+            <h2 class="font-weight-light mb-0">Easy Access To Favorite Spots</h2>
+        </div>
+    </header>
+
+    <!-- Portfolio Grid Section -->
+    <!-- About Section -->
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <h2 class="text-center text-uppercase text-secondary mb-0">Random Spots</h2>
+            <hr class="star-dark mb-5">
+            <div class="row">
+                @{ int iterator = 0;}
+                @for (int i = 0; i < ViewBag.Paths.Count; i++)
+                {
+                    <div class="col-md-6 col-lg-4">
+                        <a class="portfolio-item d-block mx-auto" href="@Url.Content("~/Spot/Details/"+ViewBag.SpotId[iterator])">
+
+                            <img class="img-fluid" src="@Url.Content("~/Content/SpotImages/"+ViewBag.Paths[iterator] )" alt="">
+                        </a>
+                    </div>
+                    iterator += 1;
+
+
+                }
+
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4"></h4>
+                    <p class="lead mb-0">
+
+                    </p>
+                </div>
+                <div class="col-md-4 mb-5 mb-lg-0">
+                    <h4 class="text-uppercase mb-4">Around the Web</h4>
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="https://www.facebook.com/dialog/feed?app_id=184683071273&link=http%3A%2F%2Fwww.insert-url-to-share-here.com&picture=http%3A%2F%2Flocalhost%3A50379%2FHome%2FIndex.jpg&name=Spot%20Map&caption=%20&description=This%20is%20a%20Facebook%20description.&redirect_uri=http%3A%2F%2Fwww.facebook.com%2F">
+                                <i class="fa fa-fw fa-facebook" id="shareBtn"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-google-plus"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-linkedin"></i>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="btn btn-outline-light btn-social text-center rounded-circle" href="#">
+                                <i class="fa fa-fw fa-dribbble"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    <div class="copyright py-4 text-center text-white">
+        <div class="container">
+            <small>Copyright &copy; SpotMap 2018</small>
+        </div>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+
+    <!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+    <div class="scroll-to-top d-lg-none position-fixed ">
+        <a class="js-scroll-trigger d-block text-center text-white rounded" href="#page-top">
+            <i class="fa fa-chevron-up"></i>
+        </a>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+    <!-- Portfolio Modals -->
+    <!-- Portfolio Modal 1 -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="../Content/Bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="../Content/Bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="../Content/Bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../Content/Bootstrap/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="../Content/Bootstrap/js/jqBootstrapValidation.js"></script>
+    <script src="../Content/Bootstrap/js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="../Content/Bootstrap/js/freelancer.min.js"></script>
+    <script>
+
+        $.ajax({
+            url: "/Spot/GetSpotsJSON",
+            type: "GET",
+            data: {},
+            success: function (data) {
+
+
+                var iconBase = '../../Content/Markers/';
+                var obj = data[0];
+                // alert(JSON.stringify(data));
+                //alert("JSON LOADED!");
+                for (i = 0; i < data.length; i++) {
+                    var obj = data[i];
+
+
+
+
+
+
+
+
+                }
+
+            }
+
+        });
+    </script>
+    <script>
+        function blinker() {
+            $('#blinker').fadeOut(300);
+            $('#blinker').fadeIn(300);
+        }
+
+
+        function blinker1() {
+            $('#blinker1').fadeOut(500);
+            $('#blinker1').fadeIn(500);
+        }
+
+        setInterval(blinker, 300);
+        setInterval(blinker1, 1000);
+    </script>
+
+    
+</body>
+
+</html>
+

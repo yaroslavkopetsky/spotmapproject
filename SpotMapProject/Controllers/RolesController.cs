@@ -12,7 +12,7 @@ using Microsoft.AspNet.Identity.Owin;
 
 namespace SpotMapProject.Controllers
 {
-    [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin,moder")]
     public class RolesController : Controller
     {
         private DataBaseController dbcon = new DataBaseController();

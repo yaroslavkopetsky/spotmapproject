@@ -13,10 +13,10 @@ namespace SpotMapProject.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SpotEntities : DbContext
+    public partial class SpotEntity : DbContext
     {
-        public SpotEntities()
-            : base("name=SpotEntities")
+        public SpotEntity()
+            : base("name=SpotEntity")
         {
         }
     

@@ -1,69 +1,186 @@
 ﻿@model IEnumerable<SpotMapProject.Models.AspNetSpot>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.desc)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.lat)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.lon)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.visible)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.@public)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.added)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.author)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.desc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.lat)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.lon)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.visible)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.@public)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.added)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.author)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+<head>
+    <style>
+        td {
+            font-size: 14px;
+        }
+    </style>
+    <link href="../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../Content/Bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="../Content/Bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
+
+    <style>
+
+
+        div.polaroid {
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            margin-bottom: 25px;
+        }
+
+        div.textCont {
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 20px;
+            font-family: myFirstFont;
+        }
+
+        @@font-face {
+            font-family: myFirstFont;
+            src: url(../Content/Fonts/voice.ttf);
+        }
+
+        row {
+            display: flex;
+        }
+
+        /* Create three equal columns that sits next to each other */
+        .column {
+            flex: 33.33%;
+            padding: 5px;
+        }
+    </style>
+
+
+</head>
+
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="@Url.Content("~/Home/Index")">SpotMap</a>
+        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))
+                    {
+                        if (Context.User.IsInRole("admin"))
+                        {
+                            <li class="nav-item mx-0 mx-lg-1">
+                                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Roles/Index")">Administrating <img src="@Url.Content("~/Content/Icons/admin.png")" alt="IMAGES" id="img" /></a>
+                            </li>
+
+                        }
+                    }
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowFavoriteSpots")">Favorites <img src="@Url.Content("~/Content/Icons/favorite.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                }
+                <li class="nav-item mx-0 mx-lg-1">
+                    @Html.Partial("_LoginPartial");
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+@if (Model.Count() > 0)
+{
+
+
+    int iterator = 0;
+
+
+
+    do
+    {
+        <div class="row">
+            @if (iterator < Model.Count())
+            {
+
+            <div class="column">
+                <a href="@Url.Content("~/Spot/Details/" + ViewBag.SpotId[iterator])">
+                    <div class="polaroid">
+                        <img src="@Url.Content("~/Content/SpotImages/" + ViewBag.Paths[iterator])" alt="5 Terre" style="width:100%">
+                        <div class="textCont">
+
+                            <p>@Model.ElementAt(iterator).title</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+
+
+
+
+            iterator++;
+            }
+
+
+            @if (iterator < Model.Count())
+            {
+            <div class="column">
+                <a href="@Url.Content("~/Spot/Details/" + ViewBag.SpotId[iterator])">
+                    <div class="polaroid">
+                        <img src="@Url.Content("~/Content/SpotImages/" + ViewBag.Paths[iterator])" alt="5 Terre" style="width:100%">
+                        <div class="textCont">
+
+                            <p>@Model.ElementAt(iterator).title</p>
+                        </div>
+                    </div>
+                    </a>
+            </div>
+
+
+
+                iterator++;
+            }
+            @if (iterator < Model.Count())
+            {
+            <div class="column">
+                <a href="@Url.Content("~/Spot/Details/" + ViewBag.SpotId[iterator])">
+                    <div class="polaroid">
+                        <img src="@Url.Content("~/Content/SpotImages/" + ViewBag.Paths[iterator])" alt="5 Terre" style="width:100%">
+                        <div class="textCont">
+
+                            <p>@Model.ElementAt(iterator).title</p>
+                        </div>
+                    </div>
+            </a>
+                    </div>
+
+
+
+
+                iterator++;
+            }
+            </div>
+    } while (iterator < Model.Count());
+
+}
+else
+{
+    <br />
+    <H1>Add Some Spots To Favorites using Map</H1>
+    <br />
 }
 
-</table>
+
+
+
+
+

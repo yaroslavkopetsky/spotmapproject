@@ -12,7 +12,7 @@ namespace SpotMapProject.Controllers
     {
         private DataBaseController dbcon = new DataBaseController();
         // GET: Users
-      
+        [Authorize(Roles = "admin,moder")]
         [HttpGet]
         public ActionResult ShowUsers()
         {
@@ -31,7 +31,7 @@ namespace SpotMapProject.Controllers
 
             return View();
         }
-
+        [Authorize(Roles = "admin,moder")]
         public ActionResult Details(string id)
         {
             
@@ -55,7 +55,7 @@ namespace SpotMapProject.Controllers
             }
             return View();
         }
-
+        [Authorize(Roles = "admin,moder")]
         public ActionResult ShowEditRequests()
         {
 
@@ -79,11 +79,17 @@ namespace SpotMapProject.Controllers
             return View(); 
 
         }
-            
+        [Authorize(Roles = "admin,moder")]
         public ActionResult AcceptUserEditRequest(string id)
         {
             dbcon.AcceptUserEditRequest(id);
             return RedirectToAction("ShowEditRequests","Users") ;
+        }
+        [Authorize(Roles = "admin,moder")]
+        public ActionResult DeclineEditRequest(string id)
+        {
+            dbcon.DeclineSpotEditRequest(id);
+            return RedirectToAction("ShowEditRequests", "Users");
         }
 
     }

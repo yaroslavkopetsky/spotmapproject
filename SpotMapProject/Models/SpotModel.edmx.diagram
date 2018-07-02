@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a6521f20d7e2464ea69cc93e3fdd80bf" Name="Diagram1">
+      <Diagram DiagramId="85ebb28122c2435bbd0e64da54e98ce8" Name="Diagram1">
         <EntityTypeShape EntityType="SpotModel.AspNetSpot" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>

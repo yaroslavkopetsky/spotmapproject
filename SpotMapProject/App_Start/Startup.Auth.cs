@@ -48,21 +48,22 @@ namespace SpotMapProject
             // Uncomment the following lines to enable logging in with third party login providers
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
-            //    clientSecret: "");
+            //    clientSecret: "");deWF6863qkbahBPWKW1]+}{      
 
             //app.UseTwitterAuthentication(
-            //   consumerKey: "",
-            //   consumerSecret: "");
+            // consumerKey: " GAN45qSjv1Q8bgBFBPaFOBQ2j",
+            // consumerSecret: "gkRUKhwDiPlOWPevS5A6gw9CS4SpFi25GrspFhjEySfDf049XH");
 
             app.UseFacebookAuthentication(
                appId: "616366365390103",
                appSecret: "ac352c1f1ea2bf39d10f01f1816d2729");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+          {
+                ClientId = "91659244009-0s4lvai241jht6ri5725ipi34rp5fugb.apps.googleusercontent.com",
+
+              ClientSecret = "qrcLFl7EFCBRmBHZOt9ran3c"
+            });
         }
     }
 }

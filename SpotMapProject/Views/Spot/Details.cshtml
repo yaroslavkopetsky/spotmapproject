@@ -1,179 +1,351 @@
 ﻿
 @model SpotMapProject.Models.DetailsViewModel.MyViewModel
 <head>
+
+    <link href="../../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../../Content/Bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="../../Content/Bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
+
+
+
+    <!-- Custom styles for this template -->
+
+
     <style>
         /* Set the size of the div element that contains the map */
-        #img {
+        p {
+            font-size: 15px;
+            font-family: myFirstFont;
+        }
+
+        input {
+            font-size: 15px;
+        }
+
+        .image {
             height: 300px; /* The height is 400 pixels */
             width: 300px; /* The width is the width of the web page */
         }
+        textarea{
+            font-size:15px;
+
+        }
+        button{
+            font-size:15px;
+        }
+        .slidecontainer {
+            width: 100%; /* Width of the outside container */
+        }
+
+        /* The slider itself */
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 15px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #4CAF50;
+                cursor: pointer;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #4CAF50;
+                cursor: pointer;
+            }
+
+        @@font-face {
+            font-family: myFirstFont;
+            src: url(../Content/Fonts/FastForward.ttf);
+        }
     </style>
 </head>
-<div>
-    <h4>AspNetSpot</h4>
-    <hr />
-    @if (Model.editor)
-    {
-        using (Html.BeginForm("UpdateSpot", "Spot", FormMethod.Get))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="@Url.Content("~/Home/Index")">SpotMap</a>
+        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))
+                    {
+                        if (Context.User.IsInRole("admin"))
+                        {
+                            <li class="nav-item mx-0 mx-lg-1">
+                                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Roles/Index")">Administrating <img src="@Url.Content("~/Content/Icons/admin.png")" alt="IMAGES" id="img" /></a>
+                            </li>
 
-            <p>
+                        }
+                    }
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowFavoriteSpots")">Favorites <img src="@Url.Content("~/Content/Icons/favorite.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                }
+                <li class="nav-item mx-0 mx-lg-1">
+                    @Html.Partial("_LoginPartial");
+                </li>
 
-                @Html.Hidden("id", Model.SpotData.Id)
+            </ul>
+        </div>
+    </div>
+</nav>
 
-            </p>
 
-            <input type="submit" value="Update Spot" />
-        }
-    }
-    else
-    {
-        using (Html.BeginForm("AddEditRequest", "Users", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
+@section Styles {
+    <br /><br />
+    <link href="@Url.Content("~/Content/Bootstrap/Details/style/css/blog-post.css")" rel="stylesheet" type="text/css" />
 
-            <p>
+    <div class="container" style="font-size:15px">
 
-                @Html.Hidden("id", Model.SpotData.Id)
+        <div class="row">
 
-            </p>
+            <!-- Post Content Column -->
+            <div class="col-lg-8">
 
-            <input type="submit" value="Send Request" />
-        }
-    }
+                <!-- Title -->
+                <h1 class="mt-4" >@Model.SpotData.title</h1>
 
-    <hr />
-    @if (Model.favorite)
-    {
-        using (Html.BeginForm("AddSpotToFavorites", "Spot", FormMethod.Get))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-
-            <p>
-
-                @Html.Hidden("id", Model.SpotData.Id)
-
-            </p>
-
-            <input type="submit" value="Delete From Favorites" />
-        }
-    }
-    else
-    {
-        using (Html.BeginForm("AddSpotToFavorites", "Spot", FormMethod.Get))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true)
-
-            <p>
-
-                @Html.Hidden("id", Model.SpotData.Id)
-
-            </p>
-
-            <input type="submit" value="Add Spot To Favorites" />
-        }
+                <!-- Author -->
+                <p class="lead">
+                    by
+                    <a href="#">@Model.SpotData.author</a>
+                </p>
 
 
 
-    }
-    <hr />
-    <dl class="dl-horizontal">
+                <!-- Date/Time -->
+                <!-- Preview Image -->
+                @foreach (string p in Model.photos)
+                {
+                    <hr />
+                    <a href="@Url.Content("~/Content/SpotImages/" + p )"><img class="img-fluid rounded" src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img"></a>
+                    <hr />
+                }
 
-        <dd>
-            @foreach (string p in Model.photos)
-            {
+
+                <hr>
+
+                <!-- Post Content -->
+
+
+
+
+                <blockquote class="blockquote">
+                    <p align="justify" class="mb-0" >@Model.SpotData.desc</p>
+                    <footer class="blockquote-footer">
+                        Information by
+                        <cite title="i">@Model.SpotData.author</cite>
+                    </footer>
+                </blockquote>
+
+
+                <hr>
+
+
+                @if (Model.editor)
+                {
+                    using (Html.BeginForm("UpdateSpot", "Spot", FormMethod.Get))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <p>
+
+                            @Html.Hidden("id", Model.SpotData.Id)
+
+                        </p>
+
+                        <input type="submit" value="Update Spot" class="btn btn-info" />
+                    }
+                }
+                else
+                {
+                    using (Html.BeginForm("AddEditRequest", "Users", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <p>
+
+                            @Html.Hidden("id", Model.SpotData.Id)
+
+                        </p>
+
+                        <input type="submit" value="Send Request" class="btn btn-info" />
+                    }
+                }
+                @if (Model.favorite)
+                {
+                    using (Html.BeginForm("AddSpotToFavorites", "Spot", FormMethod.Get))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <p>
+
+                            @Html.Hidden("id", Model.SpotData.Id)
+
+                        </p>
+
+                        <input type="submit" value="Delete From Favorites" class="btn btn-danger" />
+                    }
+                }
+                else
+                {
+                    using (Html.BeginForm("AddSpotToFavorites", "Spot", FormMethod.Get))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+
+                        <p>
+
+                            @Html.Hidden("id", Model.SpotData.Id)
+
+                        </p>
+
+                        <input type="submit" value="Add Spot To Favorites" class="btn btn-success" />
+                    }
+
+
+
+                }
                 <hr />
-                <img src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img" />
+                <br />
+                @using (Html.BeginForm("RateSpot", "Spot", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    <div class="slidecontainer">
+                        <input type="range" min="1" max="100" value="1" class="slider" id="myRange" name="value" style="font-family:myFirstFont">  <p id="value" name ="value"></p>
+                    </div>
+
+
+
+
+
+
+               
+                    @Html.Hidden("value",Request.Form["value"])
+                    @Html.Hidden("id", Model.SpotData.Id)
+
+
+
+
+                    <input type="submit" class="btn btn-primary" value="Rate" />
+                }
+                <p>Rating:@Model.Rating</p>
+
                 <hr />
-            }
-        </dd>
+                <!-- Comments Form -->
+                @using (Html.BeginForm("AddComment", "Spot", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @Html.Hidden("id", Model.SpotData.Id)
+                    <div class="card my-4">
+                        <h5 class="card-header">Leave a Comment:</h5>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <textarea class="form-control" rows="3" name="text"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                <!-- Single Comment -->
+                <hr />
 
-        <dt>
-            <p> Title :</p>
-        </dt>
+                @for (int i = 0; i < Model.SpotComments.Count; i++)
+                {
 
-        <dd>
-            <p> @Model.SpotData.title</p>
-        </dd>
-
-        <dt>
-            <p> Description: </p>
-        </dt>
-
-        <dd>
-            <p> @Model.SpotData.desc</p>
-        </dd>
-
-        <dt>
-            <p> Latitude :</p>
-        </dt>
-
-        <dd>
-            <p> @Model.SpotData.lat.ToString()</p>
-        </dd>
-
-        <dt>
-            <p> Longtitude: </p>
-        </dt>
-
-        <dd>
-            <p> @Model.SpotData.lon.ToString()</p>
-        </dd>
-
-    </dl>
+                    <div class="media mb-4">
+                        <img class="d-flex mr-3 rounded-circle" src="@Url.Content("~/Content/UserImages/user.png")" alt="">
+                        <div class="media-body">
+                            <h4 class="mt-0">@Model.Usernames[i]</h4>
+                            <h5>@Model.Date[i]</h5>
+                            @Model.SpotComments[i]
+                        </div>
+                    </div>
+                    <hr>
+                }
 
 
-
-    @using (Html.BeginForm("RateSpot", "Spot", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-
-        <p>
-        <p>Rate Spot(0-100)</p>  @Html.TextBox("value");
-
-        @Html.Hidden("id", Model.SpotData.Id)
+                <!-- Comment with nested comments -->
 
 
-        </p>
+            </div>
 
-        <input type="submit" value="Rate" />
+            <!-- Sidebar Widgets Column -->
+          
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+
+}
+
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("value");
+    output.innerHTML = slider.value; // Display the default slider value
+
+    // Update the current slider value (each time you drag the slider handle)
+    slider.oninput = function () {
+        output.innerHTML = this.value;
     }
-    <p>Rating:@Model.Rating</p>
-    <hr />
-    @using (Html.BeginForm("AddComment", "Spot", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
 
-        <p>
-            @Html.TextArea("text", null, new { @class = "form-control" })
-            @Html.Hidden("id", Model.SpotData.Id)
-
-        </p>
-
-        <input type="submit" value="Add Comment" />
-    }
-    <hr>
-    <h1>Comments</h1>
-
-    @for (int i = 0; i < Model.SpotComments.Count; i++)
-    {
-        <hr />
-        <h4><b>@Model.Usernames[i]</b> </h4> <p><i>@Model.Date[i] </i></p>
-        <br />
-        <p>@Model.SpotComments[i]</p>
-        <hr />
-    }
-    <hr />
-
-</div>
+    </script>
 
 
 
+<!-- Bootstrap core JavaScript -->
+<script src="../Content/Bootstrap/vendor/jquery/jquery.min.js"></script>
+<script src="../Content/Bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Plugin JavaScript -->
+<script src="../Content/Bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="../Content/Bootstrap/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+<!-- Contact Form JavaScript -->
+<script src="../Content/Bootstrap/js/jqBootstrapValidation.js"></script>
+<script src="../Content/Bootstrap/js/contact_me.js"></script>
+
+<!-- Custom scripts for this template -->
+<script src="../Content/Bootstrap/js/freelancer.min.js"></script>
 

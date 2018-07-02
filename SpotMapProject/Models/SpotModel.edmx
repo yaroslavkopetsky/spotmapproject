@@ -11,7 +11,7 @@
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="desc" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="desc" Type="varchar(max)" Nullable="false" />
           <Property Name="lat" Type="nvarchar" MaxLength="50" />
           <Property Name="lon" Type="nvarchar" MaxLength="50" />
           <Property Name="visible" Type="bit" />
@@ -33,7 +33,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="desc" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="lat" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="lon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="visible" Type="Boolean" />
@@ -41,7 +41,7 @@
           <Property Name="added" Type="Boolean" />
           <Property Name="author" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityContainer Name="SpotEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="SpotEntity" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetSpots" EntityType="Self.AspNetSpot" />
         </EntityContainer>
       </Schema>
@@ -49,7 +49,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="SpotModelStoreContainer" CdmEntityContainer="SpotEntities">
+        <EntityContainerMapping StorageEntityContainer="SpotModelStoreContainer" CdmEntityContainer="SpotEntity">
           <EntitySetMapping Name="AspNetSpots">
             <EntityTypeMapping TypeName="SpotModel.AspNetSpot">
               <MappingFragment StoreEntitySet="AspNetSpots">

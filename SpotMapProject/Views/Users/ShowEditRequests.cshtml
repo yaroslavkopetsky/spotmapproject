@@ -29,8 +29,8 @@
             @Html.DisplayFor(modelItem => item.active)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            <a href="/Users/DeclineEditRequest/@item.Id">Decline</a> |
             <a href="/Users/AcceptUserEditRequest/@item.Id">Accept Request</a>
         </td>
     </tr>

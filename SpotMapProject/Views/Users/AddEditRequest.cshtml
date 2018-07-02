@@ -2,15 +2,16 @@
 <hr />
 @if (ViewBag.Request == "Already Sent!")
 {
-
-    <h1 style="color:crimson;">Request Status:@ViewBag.Request</h1>
+    <div class="alert alert-warning">
+        <h1>Request Status:@ViewBag.Request</h1>
+    </div>
 }
 else
 {
+    <div class="alert alert-success">
+        <h1 >Request Status:@ViewBag.Request</h1>
+        </div>
+        }
 
-    <h1 style="color:green;">Request Status:@ViewBag.Request</h1>
-
-}
-
-<hr />
+        <hr />
 

@@ -1,11 +1,10 @@
 ﻿@model SpotMapProject.Models.IndexViewModel
 
-@{
-    ViewBag.Title = "Map";
-}
+<br />
 
-<h2>Map</h2>
 
+<!DOCTYPE html>
+<html lang="en">
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -68,210 +67,301 @@
                 height: 100px;
             }
         </style>
+        <link href="../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom fonts for this template -->
+        <link href="../Content/Bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+        <!-- Plugin CSS -->
+        <link href="../Content/Bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+        <!-- Custom styles for this template -->
+        <link href="../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
+
     </head>
-  
-    <div class="form-horizontal">
-        <div id="map"></div>
-        <div id='loading' style='display: none'><img src="../../Content/Loaders/loader.gif" title="Loading" /></div>
+
+    <body id="page-top">
 
 
-        <div class="loader" id="loader">
-        </div>
-        <input id="pac-input" class="controls" type="text"
-               placeholder="Enter a location">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+            <div class="container">
+                <a class="navbar-brand js-scroll-trigger" href="@Url.Content("~/Home/Index")">SpotMap</a>
+                <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    Menu
+                    <i class="fa fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        @if (Context.User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item mx-0 mx-lg-1">
+                                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
+                            </li>
+                            <li class="nav-item mx-0 mx-lg-1">
+                                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
+                            </li>
+                            if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))
+                            {
+                                if (Context.User.IsInRole("admin"))
+                                {
+                                    <li class="nav-item mx-0 mx-lg-1">
+                                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Roles/Index")">
+                                            Administrating <img src="@Url.Content("~/Content/Icons/admin.png")" alt="IMAGES" id="img" /> @if (ViewBag.Requests != 0)
+                                            {<span class="badge badge-error" id="blinker">@ViewBag.Requests</span>}
+                                        </a>
+                                    </li>
 
-        <script>
-            var loadingdiv = document.getElementById('loading');
-            loadingdiv.style.display = "block";
-            var markers = [];
-            var addMarker = [];
-            // Initialize and add the map
-            function initMap() {
-
-
-                var iconBase = '../../Content/Markers/';
-                var mapOptions = {
-                    mapTypeId: 'roadmap'
-                };
-                var bounds = new google.maps.LatLngBounds();
-                // The location of Uluru
-                var uluru = { lat: 0, lng: 0 };
-                // The map, centered at Uluru
-                var map = new google.maps.Map(
-                    document.getElementById('map'), { zoom: 4, center: uluru }, mapOptions);
-                var infowindow = new google.maps.InfoWindow();
-                var input = document.getElementById('pac-input');
-
-                var autocomplete = new google.maps.places.Autocomplete(input);
-                autocomplete.bindTo('bounds', map);
-
-                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-
-                autocomplete.addListener('place_changed', function () {
-                    infowindow.close();
-                    var place = autocomplete.getPlace();
-                    if (!place.geometry) {
-                        return;
-                    }
-
-                    if (place.geometry.viewport) {
-                        map.fitBounds(place.geometry.viewport);
-                    } else {
-                        map.setCenter(place.geometry.location);
-                        map.setZoom(17);
-                    }
-
-                });
-
-
-
-                // The marker, positioned at Uluru
-                google.maps.event.addListener(map, 'click', function (event) {
-                    placeMarker(event.latLng);
-                });
-
-
-
-                function placeMarker(location) {
-                    if (addMarker.length > 0) {
-                        for (var i = 0; i < addMarker.length; i++) {
-                            addMarker[0].setMap(null);
+                                }
+                            }
+                            <li class="nav-item mx-0 mx-lg-1">
+                                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowFavoriteSpots")">Favorites <img src="@Url.Content("~/Content/Icons/favorite.png")" alt="IMAGES" id="img" /></a>
+                            </li>
                         }
-                        addMarker = [];
+                        <li class="nav-item mx-0 mx-lg-1">
+                            @Html.Partial("_LoginPartial");
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
+
+
+
+        <div class="form-horizontal">
+            <div id="map"></div>
+            <div id='loading' style='display: none'><img src="../../Content/Loaders/loader.gif" title="Loading" /></div>
+
+
+            <div class="loader" id="loader">
+            </div>
+            <input id="pac-input" class="controls" type="text"
+                   placeholder="Enter a location">
+
+            <script>
+                var loadingdiv = document.getElementById('loading');
+                loadingdiv.style.display = "block";
+                var markers = [];
+                var addMarker = [];
+                var locations = [];
+                // Initialize and add the map
+                function initMap() {
+
+
+                    var iconBase = '../../Content/Markers/';
+                    var mapOptions = {
+                        mapTypeId: 'roadmap'
+                    };
+                    var bounds = new google.maps.LatLngBounds();
+                    // The location of Uluru
+                    var lati = (Math.random()) * (90 - (-90)) + (-90);
+                    var longi = (Math.random()) * (180 - (-180)) + (-180);
+                    var uluru = { lat: lati, lng: longi };
+                    // The map, centered at Uluru
+                    var map = new google.maps.Map(
+                        document.getElementById('map'), { zoom: 2, center: uluru }, mapOptions);
+                    var infowindow = new google.maps.InfoWindow();
+                    var input = document.getElementById('pac-input');
+
+                    var autocomplete = new google.maps.places.Autocomplete(input);
+                    autocomplete.bindTo('bounds', map);
+                    var mc = new MarkerClusterer(map);
+                    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+
+                    autocomplete.addListener('place_changed', function () {
+                        infowindow.close();
+                        var place = autocomplete.getPlace();
+                        if (!place.geometry) {
+                            return;
+                        }
+
+                        if (place.geometry.viewport) {
+                            map.fitBounds(place.geometry.viewport);
+                        } else {
+                            map.setCenter(place.geometry.location);
+                            map.setZoom(17);
+                        }
+
+                    });
+
+
+
+                    // The marker, positioned at Uluru
+                    google.maps.event.addListener(map, 'click', function (event) {
+                        placeMarker(event.latLng);
+                    });
+
+
+
+                    function placeMarker(location) {
+                        if (addMarker.length > 0) {
+                            for (var i = 0; i < addMarker.length; i++) {
+                                addMarker[0].setMap(null);
+                            }
+                            addMarker = [];
+
+                        }
+
+                        var marker = new google.maps.Marker({
+                            position: location,
+                            map: map,
+                            animation: google.maps.Animation.DROP,
+                            icon: iconBase + 'addmarker.png'
+                        });
+                        addMarker.push(marker);
+                        var lat = marker.getPosition().lat();
+                        var lng = marker.getPosition().lng();
+                        var add_url = "/Spot/AddSpot?lat=" + String(lat) + "&lon=" + String(lng);
+                        //+"&lon="+String(lon)+""
+                        marker.info = new google.maps.InfoWindow({
+
+                            content: 'Add This Marker' + " " + '<a href=' + add_url + ' > ADD</a> '
+                            // content:"Add Spot"
+                        });
+                        google.maps.event.addListener(marker, 'click', function () {
+
+                            var marker_map = this.getMap();
+                            this.info.open(marker_map, this);
+
+                            // window.location.href = marker.url;
+
+
+
+                        });
 
                     }
 
-                    var marker = new google.maps.Marker({
-                        position: location,
-                        map: map,
-                        animation: google.maps.Animation.DROP,
-                        icon: iconBase + 'addmarker.png'
+                    $.ajax({
+                        url: "/Spot/GetSpotsJSON",
+                        type: "GET",
+                        data: {},
+                        success: function (data) {
+                            var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow");
+                            // var iconBase = 'https://drive.google.com/drive/folders/1d1SYy1UItwXQ0H-BjYiMRDrNSlHPUr7x?usp=sharing/';
+                            var iconBase = '../../Content/Markers/';
+                            var obj = data[0];
+                            // alert(JSON.stringify(data));
+                            //alert("JSON LOADED!");
+                            for (i = 0; i < data.length; i++) {
+                                var obj = data[i];
+                                var myLatLng = { lat: parseFloat(obj.lat), lng: parseFloat(obj.lon) };
+                                var url_link = "/Spot/Details/" + obj.Id;
+
+                                if (obj.public == false) {
+                                    var marker = new google.maps.Marker({
+                                        position: myLatLng,
+                                        map: map,
+                                        title: obj.title,
+                                        // animation: google.maps.Animation.DROP,
+                                        name: obj.desc + '(Private)',
+                                        // label: obj.title.charAt(0),
+                                        url: "/Spot/Details/" + obj.Id,
+
+                                        icon: iconBase + 'privatespot.png'
+
+
+                                    });
+
+                                    marker.info = new google.maps.InfoWindow({
+
+                                        content: obj.desc + " " + '(Private)' + '<a href="' + url_link + '" >' + "Show Details </a> "
+                                    });
+                                    locations.push(marker.position);
+
+                                }
+                                if (obj.public == true) {
+
+                                    var marker = new google.maps.Marker({
+                                        position: myLatLng,
+                                        map: map,
+                                        // animation: google.maps.Animation.DROP,
+                                        title: obj.title,
+                                        name: obj.desc,
+                                        //label: obj.title.charAt(0),
+                                        url: "/Spot/Details/" + obj.Id,
+
+                                        icon: iconBase + 'publicspot.png'
+                                    });
+                                    marker.info = new google.maps.InfoWindow({
+
+                                        content: obj.desc + " " + '<a href="' + url_link + '" >' + "Show Details </a> "
+                                    });
+
+
+                                    markers.push(marker);
+                                }
+
+
+
+                                google.maps.event.addListener(marker, 'click', function () {
+
+                                    var marker_map = this.getMap();
+                                    this.info.open(marker_map, this);
+
+                                    // window.location.href = marker.url;
+
+
+
+                                });
+                                // map.fitBounds(bounds);
+
+
+                            }
+                            var markerCluster = new MarkerClusterer(map, markers,
+                                { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+
+                            var loadingdiv = document.getElementById('loading');
+                            loadingdiv.style.display = "none";
+                        }
+
                     });
-                    addMarker.push(marker);
-                    var lat = marker.getPosition().lat();
-                    var lng = marker.getPosition().lng();
-                    var add_url = "/Spot/AddSpot?lat=" + String(lat) + "&lon=" + String(lng);
-                    //+"&lon="+String(lon)+""
-                    marker.info = new google.maps.InfoWindow({
 
-                        content: 'Add This Marker' + " " + '<a href=' + add_url + ' > ADD</a> '
-                        // content:"Add Spot"
-                    });
-                    google.maps.event.addListener(marker, 'click', function () {
-
-                        var marker_map = this.getMap();
-                        this.info.open(marker_map, this);
-
-                        // window.location.href = marker.url;
-
-
-
-                    });
                 }
 
-                $.ajax({
-                    url: "/Spot/GetSpotsJSON",
-                    type: "GET",
-                    data: {},
-                    success: function (data) {
-                        var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow");
-                        // var iconBase = 'https://drive.google.com/drive/folders/1d1SYy1UItwXQ0H-BjYiMRDrNSlHPUr7x?usp=sharing/';
-                        var iconBase = '../../Content/Markers/';
-                        var obj = data[0];
-                        // alert(JSON.stringify(data));
-                        //alert("JSON LOADED!");
-                        for (i = 0; i < data.length; i++) {
-                            var obj = data[i];
-                            var myLatLng = { lat: parseFloat(obj.lat), lng: parseFloat(obj.lon) };
-                            var url_link = "/Spot/Details/" + obj.Id;
 
-                            if (obj.public == false) {
-                                var marker = new google.maps.Marker({
-                                    position: myLatLng,
-                                    map: map,
-                                    title: obj.title,
-                                    animation: google.maps.Animation.DROP,
-                                    name: obj.desc + '(Private)',
-                                    // label: obj.title.charAt(0),
-                                    url: "/Spot/Details/" + obj.Id,
+            </script>
 
-                                    icon: iconBase + 'privatespot.png'
+            <!--Load the API from the specified URL
+        * The async attribute allows the browser to render the page while the API loads
+        * The key parameter will contain your own API key (which is not needed for this tutorial)
+        * The callback parameter executes the initMap() function
+        -->
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGuCkGLcAi5O91W6IF7pCpzT7bjBqbflc&callback=initMap">
+            </script>
+
+            <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+            </script>
 
 
-                                });
+            <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGuCkGLcAi5O91W6IF7pCpzT7bjBqbflc&libraries=places&callback=initMap"
+                    async defer></script>
 
-                                marker.info = new google.maps.InfoWindow({
+            <!-- Bootstrap core JavaScript -->
 
-                                    content: obj.desc + " " + '(Private)' + '<a href="' + url_link + '" >' + "Show Details </a> "
-                                });
+        </div>
+        <script src="../Content/Bootstrap/vendor/jquery/jquery.min.js"></script>
+        <script src="../Content/Bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-                            }
-                            if (obj.public == true) {
+        <!-- Plugin JavaScript -->
+        <script src="../Content/Bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+        <script src="../Content/Bootstrap/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
 
-                                var marker = new google.maps.Marker({
-                                    position: myLatLng,
-                                    map: map,
-                                    animation: google.maps.Animation.DROP,
-                                    title: obj.title,
-                                    name: obj.desc,
-                                    //label: obj.title.charAt(0),
-                                    url: "/Spot/Details/" + obj.Id,
+        <!-- Contact Form JavaScript -->
+        <script src="../Content/Bootstrap/js/jqBootstrapValidation.js"></script>
+        <script src="../Content/Bootstrap/js/contact_me.js"></script>
 
-                                    icon: iconBase + 'publicspot.png'
-                                });
-                                marker.info = new google.maps.InfoWindow({
-
-                                    content: obj.desc + " " + '<a href="' + url_link + '" >' + "Show Details </a> "
-                                });
+        <!-- Custom scripts for this template -->
+        <script src="../Content/Bootstrap/js/freelancer.min.js"></script>
 
 
-
-                            }
-
-
-
-                            google.maps.event.addListener(marker, 'click', function () {
-
-                                var marker_map = this.getMap();
-                                this.info.open(marker_map, this);
-
-                                // window.location.href = marker.url;
-
-
-
-                            });
-                            // map.fitBounds(bounds);
-                            markers.push(marker);
-
-                        }
-
-                        var loadingdiv = document.getElementById('loading');
-                        loadingdiv.style.display = "none";
-                    }
-                });
-
-            }
-
-
-        </script>
-
-        <!--Load the API from the specified URL
-    * The async attribute allows the browser to render the page while the API loads
-    * The key parameter will contain your own API key (which is not needed for this tutorial)
-    * The callback parameter executes the initMap() function
-    -->
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGuCkGLcAi5O91W6IF7pCpzT7bjBqbflc&callback=initMap">
-        </script>
-
-
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGuCkGLcAi5O91W6IF7pCpzT7bjBqbflc&libraries=places&callback=initMap"
-                async defer></script>
-
-
-    </div>
-
+    </body>
 }
-
+</html>
 
