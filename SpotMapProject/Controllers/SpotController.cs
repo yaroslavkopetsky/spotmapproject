@@ -39,9 +39,9 @@ namespace SpotMapProject.Controllers
         //Role=("Moderator","Admin")
         [Authorize]
         [HttpPost]
-        public ActionResult AddSpot(AspNetSpot model, HttpPostedFileBase[] files)
+        public ActionResult AddSpot(AspNetSpot model, HttpPostedFileBase[] files , string desc)
         {
-
+            model.desc = desc;
             foreach (HttpPostedFileBase file in files)
             {
 
@@ -78,9 +78,9 @@ namespace SpotMapProject.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult RequestSpot(AspNetSpot model, HttpPostedFileBase[] files)
+        public ActionResult RequestSpot(AspNetSpot model, HttpPostedFileBase[] files,string desc)
         {
-
+            model.desc = desc;
             foreach (HttpPostedFileBase file in files)
             {
 
@@ -117,7 +117,7 @@ namespace SpotMapProject.Controllers
         [HttpGet]
         public ActionResult Details(string id) //View Spot Details By Id
         {
-
+            ViewBag.Username = user.UserName;
             AspNetSpot spot = new AspNetSpot();
 
             spot = dbcon.GetSpotDataByID(id);
@@ -193,8 +193,9 @@ namespace SpotMapProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateSpot(AspNetSpot model, HttpPostedFileBase[] files)
+        public ActionResult UpdateSpot(AspNetSpot model, HttpPostedFileBase[] files , string desc)
         {
+            model.desc = desc;
             if (files[0] != null)
             {
                 foreach (HttpPostedFileBase file in files)
@@ -297,5 +298,14 @@ namespace SpotMapProject.Controllers
             dbcon.DeleteImage(photos[id]);
             return RedirectToAction("Details", new { id = spot_id });
         }
+        [HttpGet]
+        public ActionResult DeleteCommentByID(string id, string spot_id)
+        {
+            id = Request.QueryString["id"];
+            spot_id = Request.QueryString["spot_id"];
+            dbcon.DeleteCommentByID(id,spot_id);
+            return RedirectToAction("Details", new { id = spot_id });
+        }
+
     }
 }

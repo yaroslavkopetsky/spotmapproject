@@ -24,7 +24,7 @@
         /* Set the size of the div element that contains the map */
         p {
             font-size: 15px;
-            font-family: myFirstFont;
+            
         }
 
         input {
@@ -79,7 +79,7 @@
 
         @@font-face {
             font-family: myFirstFont;
-            src: url(../Content/Fonts/FastForward.ttf);
+            src: url(../../Content/Fonts/ARCADECLASSIC.ttf);
         }
     </style>
 </head>
@@ -136,7 +136,7 @@
             <div class="col-lg-8">
 
                 <!-- Title -->
-                <h1 class="mt-4" >@Model.SpotData.title</h1>
+                <h1 class="mt-4">@Model.SpotData.title</h1>
 
                 <!-- Author -->
                 <p class="lead">
@@ -164,7 +164,7 @@
 
 
                 <blockquote class="blockquote">
-                    <p align="justify" class="mb-0" >@Model.SpotData.desc</p>
+                    <p align="justify" class="mb-0">@Model.SpotData.desc</p>
                     <footer class="blockquote-footer">
                         Information by
                         <cite title="i">@Model.SpotData.author</cite>
@@ -249,7 +249,7 @@
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
                     <div class="slidecontainer">
-                        <input type="range" min="1" max="100" value="1" class="slider" id="myRange" name="value" style="font-family:myFirstFont">  <p id="value" name ="value"></p>
+                        <input type="range" min="1" max="100" value="1" class="slider" id="myRange" name="value" style="font-family:myFirstFont">  <p id="value" name="value"></p>
                     </div>
 
 
@@ -257,8 +257,8 @@
 
 
 
-               
-                    @Html.Hidden("value",Request.Form["value"])
+
+                    @Html.Hidden("value", Request.Form["value"])
                     @Html.Hidden("id", Model.SpotData.Id)
 
 
@@ -292,18 +292,25 @@
 
                 @for (int i = 0; i < Model.SpotComments.Count; i++)
                 {
-
-                    <div class="media mb-4">
-                        <img class="d-flex mr-3 rounded-circle" src="@Url.Content("~/Content/UserImages/user.png")" alt="">
-                        <div class="media-body">
-                            <h4 class="mt-0">@Model.Usernames[i]</h4>
-                            <h5>@Model.Date[i]</h5>
-                            @Model.SpotComments[i]
-                        </div>
+                    
+                <div class="media mb-4">
+                    <img class="d-flex mr-3 rounded-circle" src="@Url.Content("~/Content/UserImages/user.png")" alt="">
+                    <div class="media-body">
+                        <h4 class="mt-0">@Model.Usernames[i]</h4>
+                        <h5>@Model.Date[i]</h5>
+                        @Model.SpotComments[i]
                     </div>
-                    <hr>
+                    @if (Model.Usernames[i] == ViewBag.Username)
+                    {
+                        @Html.Hidden("spot_id", Model.SpotData.Id);
+                        @Html.Hidden("id", i);
+                       <a href="@Url.Content("~/Spot/DeleteCommentByID?id="+i+"&spot_id="+Model.SpotData.Id)"> <input type="submit" value="Delete Comment" class="btn btn-danger" /></a>
+                    }
+                </div>
+                        <hr>
+                   
+                
                 }
-
 
                 <!-- Comment with nested comments -->
 

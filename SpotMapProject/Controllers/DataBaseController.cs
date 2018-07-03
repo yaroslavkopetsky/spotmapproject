@@ -210,6 +210,8 @@ namespace SpotMapProject.Controllers
 
         }
 
+
+
         public List<string> GetCommentUsernameByID(string id)
         {
             List<string> usernames = new List<string>();
@@ -695,6 +697,19 @@ namespace SpotMapProject.Controllers
                     spotreq_entity.AspNetSpotEdits.Remove(model);
                     spotreq_entity.SaveChanges();
                 }
+            }
+        }
+
+        public void DeleteCommentByID(string id,string spot_id)//NOT WORKING !!!!!!
+        {
+            List<AspNetSpotComment> comment = new List<AspNetSpotComment>();
+             comment.AddRange(spotcom_entity.AspNetSpotComments.Where(x=>x.spot_id == spot_id).ToList());
+            if(comment[0]!=null)
+            {
+                comment.Reverse();
+                int ID = Convert.ToInt32(id);
+                spotcom_entity.AspNetSpotComments.Remove(comment.ElementAt(ID));
+                spotcom_entity.SaveChanges();
             }
         }
     }

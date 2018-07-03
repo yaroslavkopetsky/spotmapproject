@@ -49,7 +49,7 @@
 <hr />
 <h3>Delete A User from a Role</h3>
 
-@using (Html.BeginForm("DeleteRoleForUser", "Roles"))
+@using (Html.BeginForm("DeleteFromRole", "Roles",FormMethod.Post))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true)

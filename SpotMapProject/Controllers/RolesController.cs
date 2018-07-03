@@ -114,35 +114,24 @@ namespace SpotMapProject.Controllers
 
         public ActionResult GetRoles(string UserName)
         {
-           
-            var roleManager = Request.GetOwinContext().Get<RoleManager<IdentityRole>>();
             var context = new ApplicationDbContext();
+            ApplicationUser user = context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
 
-            string[] rolesArray;
-            if (!string.IsNullOrWhiteSpace(UserName))
-            {
-                rolesArray = Roles.GetRolesForUser();
-                /*
-                ApplicationUser user = context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
-                var account = new AccountController();
+            var list = context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            ViewBag.Roles = list;
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            List<string> roles = UserManager.GetRoles(user.Id).ToList();
+            ViewBag.UserName = UserName;
+            ViewBag.Roles = roles;
 
-                ViewBag.RolesForThisUser = account.UserManager.GetRoles(user.Id);
-
-             */
-
-               
-                var list = rolesArray.ToList();
-                ViewBag.Roles = list;
-  
-            
+            return View();
 
 
 
-                
-            }
-
-            return View("ManageUserRoles");
         }
+
+           
+        
 
         public ActionResult Delete(string RoleName)
         {
@@ -165,6 +154,20 @@ namespace SpotMapProject.Controllers
             return View(dbcon.GetAllSpots());
         }
 
+        [HttpPost]
+        public ActionResult  DeleteFromRole(string RoleName,string UserName)
+        {
+            
+            var context = new ApplicationDbContext();
+            ApplicationUser user = context.Users.Where(u => u.UserName.Equals(UserName, StringComparison.CurrentCultureIgnoreCase)).FirstOrDefault();
+            
+            var list = context.Roles.OrderBy(r => r.Name).ToList().Select(rr => new SelectListItem { Value = rr.Name.ToString(), Text = rr.Name }).ToList();
+            ViewBag.Roles = list;
+            var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            UserManager.RemoveFromRole(user.Id, RoleName);
+          
+            return View("ManageUserRoles");
+        }
 
     }
 }

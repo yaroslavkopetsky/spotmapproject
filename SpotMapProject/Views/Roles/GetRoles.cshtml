@@ -2,6 +2,11 @@
 @{
     ViewBag.Title = "GetRoles";
 }
+<h2>@ViewBag.UserName is i Roles Of:</h2>
+<br />
+@foreach(string role in ViewBag.Roles)
+{
+    <h3>@role</h3>
+}
 
-<h2>GetRoles</h2>
 

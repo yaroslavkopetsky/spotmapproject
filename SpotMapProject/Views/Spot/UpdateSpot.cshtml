@@ -1,122 +1,205 @@
 ﻿@model SpotMapProject.Models.AspNetSpot
-<style>
-    /* Set the size of the div element that contains the map */
-    .image {
-        height: 300px; /* The height is 400 pixels */
-        width: 300px; /* The width is the width of the web page */
-    }
-</style>
+
+<head>
+    <link href="../../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../../Content/Bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="../../Content/Bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
+
+    <style>
+        /* Set the size of the div element that contains the map */
+        .image {
+            height: 300px; /* The height is 400 pixels */
+            width: 300px; /* The width is the width of the web page */
+        }
+      
+      .form-horizontal{
+          font-size:15px;
+      }
+
+  
+      .col-md-10{
+          font-size:15px;
+      }
+      
+    </style>
+</head>
+
+<nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="@Url.Content("~/Home/Index")">SpotMap</a>
+        <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fa fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+                @if (Context.User.Identity.IsAuthenticated)
+                {
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))
+                    {
+                        if (Context.User.IsInRole("admin"))
+                        {
+                            <li class="nav-item mx-0 mx-lg-1">
+                                <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Roles/Index")">Administrating <img src="@Url.Content("~/Content/Icons/admin.png")" alt="IMAGES" id="img" /></a>
+                            </li>
+
+                        }
+                    }
+                    <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowFavoriteSpots")">Favorites <img src="@Url.Content("~/Content/Icons/favorite.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                }
+                <li class="nav-item mx-0 mx-lg-1">
+                    @Html.Partial("_LoginPartial");
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
 @using (Html.BeginForm("UpdateSpot", "Spot", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
-<div class="form-horizontal">
-    <h4>AspNetSpot</h4>
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.Id)
-    class="form-group">
-    <hr />
-    @{
-        int i = 0;
-    }
-    @foreach (string p in ViewBag.photos)
-    {
+
+
+
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
 
         <hr />
-        <img src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img" class="image" />
+        @{
+            int i = 0;
+        }
+        @foreach (string p in ViewBag.photos)
+        {
+
+            <hr />
+            <img src="@Url.Content("~/Content/SpotImages/" + p)" alt="IMAGES" id="img" class="image" />
+            <hr />
+            <a href="@Url.Content("~/Spot/UpdateImage?spot_id="+ViewBag.spotid+"&index="+i)">Update This Image  </a> 
+            <a>||</a>
+            <a href="@Url.Content("~/Spot/DeleteImage?spot_id="+ViewBag.spotid+"&index="+i)">Delete This Image</a>
+            <hr />
+            i++;
+        }
+
+
+
+
+
+
+
         <hr />
-        <a href="@Url.Content("~/Spot/UpdateImage?spot_id="+ViewBag.spotid+"&index="+i)">Update This Image</a> 
-        <a href="@Url.Content("~/Spot/DeleteImage?spot_id="+ViewBag.spotid+"&index="+i)">Delete This Image</a>
+        <label for="file">Add Images:</label>
+        <input type="file" class="multiple" name="files" multiple />
         <hr />
-        i++;
-    }
-
-
-
-
-
-
-
-    <hr />
-    <label for="file">Add Images:</label>
-    <input type="file" class="multiple" name="files" multiple />
-    <hr />
-    <div class="form-group">
-        @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.desc, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.desc, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.desc, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.lat, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.lat, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.lat, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group">
-        @Html.LabelFor(model => model.lon, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.lon, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.lon, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    @if (User.IsInRole("admin") || User.IsInRole("moder"))
-    {
         <div class="form-group">
-            @Html.LabelFor(model => model.visible, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.visible, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.visible, "", new { @class = "text-danger" })
-            </div>
-        </div>
-    }
-    <div class="form-group">
-        @Html.LabelFor(model => model.@public, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.@public, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.@public, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    @if (User.IsInRole("admin") || User.IsInRole("moder"))
-    {
-        <div class="form-group">
-            @Html.LabelFor(model => model.added, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.added, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.added, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.title, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.author, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.desc, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.author, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.author, "", new { @class = "text-danger" })
+                <textarea name="desc" cols="50" rows="40">@Model.desc</textarea>
             </div>
         </div>
-    }
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.lat, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lat, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.lat, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.lon, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.lon, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.lon, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @if (User.IsInRole("admin") || User.IsInRole("moder"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.visible, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.visible, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.visible, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        <div class="form-group">
+            @Html.LabelFor(model => model.@public, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.@public, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.@public, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (User.IsInRole("admin") || User.IsInRole("moder"))
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.added, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.added, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.added, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.author, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.author, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.author, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        }
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
         </div>
     </div>
-</div>
+
+    <script src="../../Content/Bootstrap/vendor/jquery/jquery.min.js"></script>
+    <script src="../../Content/Bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="../../Content/Bootstrap/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../Content/Bootstrap/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="../../Content/Bootstrap/js/jqBootstrapValidation.js"></script>
+    <script src="../../Content/Bootstrap/js/contact_me.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="../../Content/Bootstrap/js/freelancer.min.js"></script>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>

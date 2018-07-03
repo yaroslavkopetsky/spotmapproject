@@ -1,0 +1,23 @@
+﻿<body ng-app="chat-app">
+
+    <div ng-controller="ChatController">
+        <div>
+            Name: <input type="text" ng-model="name" /><br />
+            Message: <input type="text" ng-model="message" /><br />
+            <input type="button" value="Send" ng-click="newMessage()" />
+        </div>
+        <div>
+            <ul>
+                <li ng-repeat="chat in messages">
+                    <span ng-bind="chat"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="../../Scripts/jquery-3.3.1.js"></script>
+    <script src="../../Scripts/jquery.signalR-2.3.0.js"></script>
+    <script src="../../signalr/hubs"></script>
+    <script src="../../Scripts/angular.js"></script>
+    <script src="../../ssampleChat.js"></script>
+</body>
