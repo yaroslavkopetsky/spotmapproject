@@ -1,4 +1,6 @@
-﻿<head>
+﻿@model IEnumerable<SpotMapProject.Models.AspNetActionControl>
+   @using System.Text.RegularExpressions;
+<head>
 
     <link href="../../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -13,12 +15,13 @@
     <!-- Custom styles for this template -->
     <link href="../../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
 
-
     <style>
-        #textdiv{
-            font-size:15px;
+
+        tr, tfoot {
+            font-size: 15px;
         }
     </style>
+
 
 
 </head>
@@ -65,24 +68,45 @@
 
 
 
-
-
-
-<h2>Create Role</h2>
-@Html.ActionLink("List Roles", "Index") | @Html.ActionLink("Manage User Role", "ManageUserRoles")
-<hr />
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true)
-   <div id="textdiv">
-    <div>
-        Role name
-    </div>
-    <p>
-        @Html.TextBox("RoleName")
-    </p>
-    <input type="submit" value="Save" />
-       </div>
+@{
+    ViewBag.Title = "ShowActions";
 }
 
+<h2>ShowActions</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.username)
+        </th>
+        <th>
+
+            @Html.DisplayNameFor(model => model.action)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @if (item.action.ToUpperInvariant().Contains("UPDATED"))
+                {
+                 string    resultString = Regex.Match(item.action.ToString(), @"\d+").Value;
+                    <a href="@Url.Content("~/Spot/Details/" + resultString)">@Html.DisplayFor(modelItem => item.action)</a>
+                }
+                else
+                {
+                    @Html.DisplayFor(modelItem => item.action)
+
+                }
+            </td>
+
+        </tr>
+    }
+
+</table>

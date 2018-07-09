@@ -175,26 +175,28 @@ namespace SpotMapProject.Controllers
 
         public void AddComment(string id, string text)
         {
+            if (text != null && !String.IsNullOrWhiteSpace(text))
+            {
+                string username = "";
 
-            string username = "";
-
-            ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
-            username = user.UserName;
+                ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+                username = user.UserName;
 
 
 
-            AspNetSpotComment comment = new AspNetSpotComment();
+                AspNetSpotComment comment = new AspNetSpotComment();
 
-            int buff = GetLastCommentID();
-            buff += 1;
+                int buff = GetLastCommentID();
+                buff += 1;
 
-            comment.Id = buff;
-            comment.spot_id = id;
-            comment.text = text;
-            comment.username = username;
-            comment.date = DateTime.Now;
-            spotcom_entity.AspNetSpotComments.Add(comment);
-            spotcom_entity.SaveChanges();
+                comment.Id = buff;
+                comment.spot_id = id;
+                comment.text = text;
+                comment.username = username;
+                comment.date = DateTime.Now;
+                spotcom_entity.AspNetSpotComments.Add(comment);
+                spotcom_entity.SaveChanges();
+            }
         }
 
         public List<string> GetSpotCommentsByID(string id)
@@ -711,6 +713,13 @@ namespace SpotMapProject.Controllers
                 spotcom_entity.AspNetSpotComments.Remove(comment.ElementAt(ID));
                 spotcom_entity.SaveChanges();
             }
+        }
+
+        public List<AspNetActionControl> GetAllUserActions()
+        {
+
+
+            return action_ctrl.AspNetActionControls.ToList();
         }
     }
 

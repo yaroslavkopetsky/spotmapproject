@@ -13,6 +13,7 @@ namespace SpotMapProject
     {
         public void Configuration(IAppBuilder app)
         {
+           
             ConfigureAuth(app);
             //  var _context = new ApplicationDbContext();
             // var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_context));

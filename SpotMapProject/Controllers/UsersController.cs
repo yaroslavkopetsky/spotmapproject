@@ -92,5 +92,14 @@ namespace SpotMapProject.Controllers
             return RedirectToAction("ShowEditRequests", "Users");
         }
 
+        [Authorize(Roles = "admin,moder")]
+        public ActionResult ShowActions()
+        {
+
+
+
+            return View(dbcon.GetAllUserActions());
+        }
+
     }
 }

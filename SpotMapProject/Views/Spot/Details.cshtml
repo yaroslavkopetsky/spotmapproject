@@ -175,7 +175,8 @@
                 <hr>
 
 
-                @if (Model.editor)
+                @if (Model.editor ||(Context.User.IsInRole("admin") || Context.User.IsInRole("moder")))
+    
                 {
                     using (Html.BeginForm("UpdateSpot", "Spot", FormMethod.Get))
                     {

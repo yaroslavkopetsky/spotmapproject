@@ -204,6 +204,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="ChatHub.cs" />
+    <Compile Include="ChatWebSocketMiddleware.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ChatRoomController.cs" />
     <Compile Include="Controllers\DataBaseController.cs" />
@@ -557,6 +558,7 @@
       <DependentUpon>AspNetActionControlModel.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\angular.min.js.map" />
+    <None Include=".bin\node.cmd" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -632,6 +634,7 @@
     <Content Include="Views\ChatRoom\Index.cshtml" />
     <Content Include="ViewPage1.cshtml" />
     <Content Include="Views\ChatRoom\SignalRTest.cshtml" />
+    <Content Include="Views\Users\ShowActions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

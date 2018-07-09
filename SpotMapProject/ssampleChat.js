@@ -1,30 +1,25 @@
-﻿((function () {
-    var app = angular.module('chat-app', []);
+﻿(function () {
+    // Defining a connection to the server hub.
+    var myHub = $.connection.myHub;
+    // Setting logging to true so that we can see whats happening in the browser console log. [OPTIONAL]
+    $.connection.hub.logging = true;
+    // Start the hub
+    $.connection.hub.start();
 
-    app.controller('ChatController', function ($scope) {
-        // scope variables
-        $scope.name = 'Guest'; // holds the user's name
-        $scope.message = ''; // holds the new message
-        $scope.messages = []; // collection of messages coming from server
-        $scope.chatHub = null; // holds the reference to hub
+    // This is the client method which is being called inside the MyHub constructor method every 3 seconds
+    myHub.client.SendServerTime = function (serverTime) {
+        // Set the received serverTime in the span to show in browser
+        $("#newTime").text(serverTime);
+    };
 
-        $scope.chatHub = $.connection.chatHub; // initializes hub
-        $.connection.hub.start(); // starts hub
+    // Client method to broadcast the message
+    myHub.client.hello = function (message) {
+        $("#message").text(message);
+    };
 
-        // register a client method on hub to be invoked by the server
-        $scope.chatHub.client.broadcastMessage = function (name, message) {
-            var newMessage = name + ' says: ' + message;
-
-            // push the newly coming message to the collection of messages
-            $scope.messages.push(newMessage);
-            $scope.$apply();
-        };
-
-        $scope.newMessage = function () {
-            // sends a new message to the server
-            $scope.chatHub.server.sendMessage($scope.name, $scope.message);
-
-            $scope.message = '';
-        };
+    //Button click jquery handler
+    $("#btnClick").click(function () {
+        // Call SignalR hub method
+        myHub.server.helloServer();
     });
-}());
+}()); 

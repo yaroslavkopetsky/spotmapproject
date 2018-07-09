@@ -84,13 +84,14 @@ namespace SpotMapProject.Controllers
             foreach (HttpPostedFileBase file in files)
             {
 
-
-                string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
+                if (file != null)
+                {
+                    string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
                                            Path.GetFileName(file.FileName));
-                file.SaveAs(path);
-                ViewBag.Message = "File uploaded successfully";
-                dbcon.AddPhotoPath(Convert.ToString(dbcon.GetLastSpotID() + 1), file.FileName);
-
+                    file.SaveAs(path);
+                    ViewBag.Message = "File uploaded successfully";
+                    dbcon.AddPhotoPath(Convert.ToString(dbcon.GetLastSpotID() + 1), file.FileName);
+                }
             }
         
             if (files[0] == null)

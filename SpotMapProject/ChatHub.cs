@@ -8,9 +8,14 @@ namespace SpotMapProject
 {
     public class ChatHub : Hub
     {
-        public void SendMessage(string name, string message)
-        {
-            Clients.All.broadcastMessage(name, message);
-        }
+
+        // to the clients every 3 seconds.
+       
+            public void Send(string name, string message)
+            {
+                // Call the broadcastMessage method to update clients.
+                Clients.All.broadcastMessage(name, message);
+            }
+        
     }
 }
