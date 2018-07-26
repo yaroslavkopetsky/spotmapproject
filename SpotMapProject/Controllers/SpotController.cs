@@ -47,8 +47,10 @@ namespace SpotMapProject.Controllers
 
                 if (file != null)
                 {
+                    string filename = Path.GetFileName(file.FileName);
+                    filename = DateTime.Now.ToString("hh.mm.ss.ffffff") + filename;
                     string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
-                                               Path.GetFileName(file.FileName));
+                                               filename);
                     file.SaveAs(path);
                     ViewBag.Message = "File uploaded successfully";
                     dbcon.AddPhotoPath(Convert.ToString(dbcon.GetLastSpotID() + 1), file.FileName);
@@ -86,8 +88,10 @@ namespace SpotMapProject.Controllers
 
                 if (file != null)
                 {
-                    string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
-                                           Path.GetFileName(file.FileName));
+                    string filename  = Path.GetFileName(file.FileName);
+                filename = DateTime.Now.ToString("hh.mm.ss.ffffff") + filename;
+                string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
+                                           filename);
                     file.SaveAs(path);
                     ViewBag.Message = "File uploaded successfully";
                     dbcon.AddPhotoPath(Convert.ToString(dbcon.GetLastSpotID() + 1), file.FileName);
@@ -277,8 +281,11 @@ namespace SpotMapProject.Controllers
         {
             if (file != null)
             {
+                string filename  = Path.GetFileName(file.FileName);
+                filename = DateTime.Now.ToString("hh.mm.ss.ffffff") + filename;
                 string path = Path.Combine(Server.MapPath("~/Content/SpotImages"),
-                                           Path.GetFileName(file.FileName));
+                                           filename);
+               
                 file.SaveAs(path);
                 ViewBag.Message = "File uploaded successfully";
                 dbcon.AddPhotoPath(Convert.ToString(dbcon.GetLastSpotID() + 1), file.FileName);
