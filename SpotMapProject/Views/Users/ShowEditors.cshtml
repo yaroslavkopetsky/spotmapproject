@@ -1,0 +1,32 @@
+﻿
+<table class="table">
+    <tr>
+
+        <th>
+           Username
+        </th>
+
+        <th></th>
+    </tr>
+
+    @foreach (string s in ViewBag.Users)
+    {
+        <tr>
+
+            <td>
+                @s
+            </td>
+
+            <td>
+
+                <a href="@Url.Content("~/Users/EditorDetails?id="+s)">Details </a>
+
+            </td>
+
+
+
+              
+        </tr>
+    }
+
+</table>

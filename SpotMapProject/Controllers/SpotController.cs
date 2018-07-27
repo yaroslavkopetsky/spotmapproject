@@ -227,9 +227,11 @@ namespace SpotMapProject.Controllers
         }
 
        [Authorize(Roles =("admin,moder"))]
+        
+      
+
         public ActionResult DeleteSpot(string id)
         {
-
             dbcon.DeleteSpot(id);
             dbcon.AddNewAction("Deleted spot with ID = " + id);
             return RedirectToAction("ShowSpots","Roles");

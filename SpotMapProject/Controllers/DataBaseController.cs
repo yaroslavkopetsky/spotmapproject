@@ -26,6 +26,11 @@ namespace SpotMapProject.Controllers
         private AspNetPhotoEntity spotphoto_entity = new AspNetPhotoEntity();
         private FavoriteSpotEntity spotfav_entity = new FavoriteSpotEntity();
         private ActionControlEntities action_ctrl = new ActionControlEntities();
+
+        /// <summary>
+        /// Adds Spot To Map 
+        /// </summary>
+        /// <param name="model"></param>
         public void AddSpot(AspNetSpot model)//Add Spot As Admin or moder
         {
 
@@ -40,6 +45,10 @@ namespace SpotMapProject.Controllers
 
         }
 
+        /// <summary>
+        /// Requests Spot Addition to Map
+        /// </summary>
+        /// <param name="model"></param>
         public void AddSpotRequest(AspNetSpot model)//Make Spot request
         {
             ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
@@ -265,6 +274,10 @@ namespace SpotMapProject.Controllers
             }
         }
 
+        /// <summary>
+        /// Returns Last Rating ID From DB
+        /// </summary>
+        /// <returns></returns>
         public int GetLastRatingID()
         {
             int max = Convert.ToInt32(spotrat_entity.AspNetSpotRatings.Max(p => p.Id));
@@ -289,6 +302,12 @@ namespace SpotMapProject.Controllers
             }
             return result;
         }
+
+        /// <summary>
+        /// Checks if User Already Rated Current Spot by Spot ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool GetUserRatingByID(int id) //Check if User Rated Current Spot
         {
             ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
@@ -641,6 +660,12 @@ namespace SpotMapProject.Controllers
             spotphoto_entity.SaveChanges();
         }
 
+
+        /// <summary>
+        /// Gets All Spot Photos using Spot ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public List<AspNetSpotPhoto> GetAllSpotPhotosToListById(string id)
         {
             List<AspNetSpotPhoto> models = spotphoto_entity.AspNetSpotPhotos.Where(x => x.spot_id == id).ToList();
@@ -687,6 +712,11 @@ namespace SpotMapProject.Controllers
             return path;
         }
 
+
+        /// <summary>
+        /// Decline User`s Edit Spot Permission by Request ID
+        /// </summary>
+        /// <param name="request_id"></param>
         public void DeclineSpotEditRequest(string request_id)
         {
             int Id;
@@ -702,7 +732,7 @@ namespace SpotMapProject.Controllers
             }
         }
 
-        public void DeleteCommentByID(string id,string spot_id)//NOT WORKING !!!!!!
+        public void DeleteCommentByID(string id,string spot_id)
         {
             List<AspNetSpotComment> comment = new List<AspNetSpotComment>();
              comment.AddRange(spotcom_entity.AspNetSpotComments.Where(x=>x.spot_id == spot_id).ToList());
@@ -720,6 +750,76 @@ namespace SpotMapProject.Controllers
 
 
             return action_ctrl.AspNetActionControls.ToList();
+        }
+
+        /// <summary>
+        /// Get All Spot Editors Grouped by Username
+        /// </summary>
+        /// <returns></returns>
+        public List<string> GetAllEditors()
+        {
+            List<string> Usernames = new List<string>();
+            List<string> GroupedUsernames = new List<string>();
+
+           
+
+            Usernames = spotreq_entity.AspNetSpotEdits.Select(x => x.username).ToList();
+
+            GroupedUsernames.Add(Usernames.ElementAt(0));
+            foreach (string name in Usernames)
+            {
+                int counter = 0;
+                for(int i = 0; i< GroupedUsernames.Count; i++)
+                {
+                    if(GroupedUsernames.ElementAt(i) == name)
+                    {
+
+                    }
+                    else
+                    {
+                        counter++;
+                    }
+                }
+                if(counter == GroupedUsernames.Count)
+                {
+                    counter = 0; 
+                    GroupedUsernames.Add(name);
+                }
+
+            }
+
+            return GroupedUsernames;
+            
+        }
+
+        /// <summary>
+        /// Get All Editable Spots For Current Editor
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public List<AspNetSpotEdit> GetEditorDetails(string username)
+        {
+
+
+
+
+            return spotreq_entity.AspNetSpotEdits.Where(x => x.username == username).ToList();
+        }
+
+
+        /// <summary>
+        /// Deletes Editor From Specific Spot
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="spot_id"></param>
+        public void DeleteEditorFromSpot(string username , string spot_id)
+        {
+            AspNetSpotEdit editor = spotreq_entity.AspNetSpotEdits.Where(x => x.username == username && spot_id == x.spot_id).First();
+            if(editor != null)
+            {
+                spotreq_entity.AspNetSpotEdits.Remove(editor);
+                spotreq_entity.SaveChanges();
+            }
         }
     }
 

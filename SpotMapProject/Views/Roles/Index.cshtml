@@ -94,7 +94,7 @@
 <h2>Manage Users</h2>
 <p>
     @Html.ActionLink("Show Users", "ShowUsers", "Users") |
-    @Html.ActionLink("Show Users Edit Request", "ShowEditRequests", "Users") @if (ViewBag.EditRequests != 0)
+    @Html.ActionLink("Show Users Edit Request", "ShowEditRequests", "Users") | @Html.ActionLink("Show Editors", "ShowEditors", "Users"); @if (ViewBag.EditRequests != 0)
     {
         <span class="badge" id="blinker1">@ViewBag.EditRequests</span>}|@Html.ActionLink("Show Users Actions", "ShowActions", "Users")
     </p>

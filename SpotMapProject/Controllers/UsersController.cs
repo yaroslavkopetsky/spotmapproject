@@ -101,5 +101,35 @@ namespace SpotMapProject.Controllers
             return View(dbcon.GetAllUserActions());
         }
 
+        [Authorize(Roles = "admin,moder")]
+        public ActionResult ShowEditors()
+        {
+
+
+            ViewBag.Users = dbcon.GetAllEditors();
+            return View(dbcon.GetAllEditors());
+        }
+
+
+        [Authorize(Roles = "admin,moder")]
+        public ActionResult EditorDetails()
+        {
+            string id = RouteData.Values["id"].ToString();
+
+           
+            return View(dbcon.GetEditorDetails(id));
+        }
+
+        [Authorize(Roles = "admin,moder")]
+        public ActionResult DeleteEditorFromSpot(string id,string username)
+        {
+            dbcon.DeleteEditorFromSpot(username, id);
+
+
+            return RedirectToAction("EditorDetails", "Users", new {id = username});
+        }
+
+
+
     }
 }
