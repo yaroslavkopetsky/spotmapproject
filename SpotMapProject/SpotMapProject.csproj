@@ -637,6 +637,7 @@
     <Content Include="Views\Users\ShowActions.cshtml" />
     <Content Include="Views\Users\ShowEditors.cshtml" />
     <Content Include="Views\Users\EditorDetails.cshtml" />
+    <Content Include="Views\Users\PostsBy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -814,13 +814,29 @@ namespace SpotMapProject.Controllers
         /// <param name="spot_id"></param>
         public void DeleteEditorFromSpot(string username , string spot_id)
         {
-            AspNetSpotEdit editor = spotreq_entity.AspNetSpotEdits.Where(x => x.username == username && spot_id == x.spot_id).First();
-            if(editor != null)
+            try
             {
-                spotreq_entity.AspNetSpotEdits.Remove(editor);
-                spotreq_entity.SaveChanges();
+                AspNetSpotEdit editor = spotreq_entity.AspNetSpotEdits.Where(x => x.username == username && spot_id == x.spot_id).First();
+                if (editor != null)
+                {
+                    spotreq_entity.AspNetSpotEdits.Remove(editor);
+                    spotreq_entity.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
+
+        public List<AspNetSpot> GetAllPostsByUsername(string username)
+        {
+
+
+            return spot_entity.AspNetSpots.Where(x => x.author == username && x.visible == true && x.@public == true).ToList();
+        }
+       
+      
     }
 
 }

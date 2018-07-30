@@ -112,24 +112,52 @@ namespace SpotMapProject.Controllers
 
 
         [Authorize(Roles = "admin,moder")]
-        public ActionResult EditorDetails()
+        public ActionResult EditorDetails(string id)
         {
-            string id = RouteData.Values["id"].ToString();
+            
 
            
             return View(dbcon.GetEditorDetails(id));
         }
 
         [Authorize(Roles = "admin,moder")]
-        public ActionResult DeleteEditorFromSpot(string id,string username)
+        public ActionResult DeleteEditorFromSpot()
         {
+            string id = Request.Params["id"];
+            string username = Request.Params["username"];
             dbcon.DeleteEditorFromSpot(username, id);
 
 
-            return RedirectToAction("EditorDetails", "Users", new {id = username});
+            return Redirect("/Users/EditorDetails/?id="+username);
         }
 
+        [Authorize]
+        public ActionResult PostsBy()
+        {
+            string username = Request.Params["username"];
+            List<AspNetSpot> spots = new List<AspNetSpot>();
 
+            if (String.IsNullOrEmpty(username) || String.IsNullOrWhiteSpace(username) || username == "") {
+
+                return View("Error");
+
+            }
+            else
+            {
+                spots = dbcon.GetAllPostsByUsername(username);
+                if (spots.Count == 0)
+                {
+                    return View("Error");
+                }
+            }
+            List<string> photos_paths = new List<string>();
+            foreach(var id in spots)
+            {
+                photos_paths.Add(dbcon.GetAllSpotPhotosByID(id.Id.ToString()).ElementAt(0));
+            }
+            ViewBag.Photos = photos_paths;
+            return View(spots);
+        }
 
     }
 }
