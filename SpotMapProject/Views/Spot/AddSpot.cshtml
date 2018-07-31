@@ -35,6 +35,9 @@
                         <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
                     </li>
                     <li class="nav-item mx-0 mx-lg-1">
+                        <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowAllSpots")">Show Spots <img src="@Url.Content("~/Content/Icons/spots.png")" alt="IMAGES" id="img" /></a>
+                    </li>
+                    <li class="nav-item mx-0 mx-lg-1">
                         <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
                     </li>
                     if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))

@@ -1,0 +1,139 @@
+﻿@model IEnumerable<SpotMapProject.Models.AspNetSpot>
+
+
+<head>
+    <link href="../../Content/Bootstrap/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../../Content/Bootstrap/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
+    <!-- Plugin CSS -->
+    <link href="../../Content/Bootstrap/vendor/magnific-popup/magnific-popup.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template -->
+    <link href="../../Content/Bootstrap/css/freelancer.min.css" rel="stylesheet">
+
+
+</head>
+
+    <nav class="navbar navbar-expand-lg bg-secondary fixed-top text-uppercase" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="@Url.Content("~/Home/Index")">SpotMap Blog</a>
+            <button class="navbar-toggler navbar-toggler-right text-uppercase bg-primary text-white rounded" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                Menu
+                <i class="fa fa-bars"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    @if (Context.User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowAllSpots")">Show Spots <img src="@Url.Content("~/Content/Icons/spots.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/AddSpot")">Add Spot <img src="@Url.Content("~/Content/Icons/plus.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+                        if (Context.User.IsInRole("admin") || Context.User.IsInRole("moder"))
+                        {
+                            if (Context.User.IsInRole("admin"))
+                            {
+                                <li class="nav-item mx-0 mx-lg-1">
+                                    <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Roles/Index")">Administrating <img src="@Url.Content("~/Content/Icons/admin.png")" alt="IMAGES" id="img" /></a>
+                                </li>
+
+                            }
+                        }
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Spot/ShowFavoriteSpots")">Favorites <img src="@Url.Content("~/Content/Icons/favorite.png")" alt="IMAGES" id="img" /></a>
+                        </li>
+                    }
+                    <li class="nav-item mx-0 mx-lg-1">
+                        @Html.Partial("_LoginPartial");
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<h2>All Spots</h2>
+<hr />
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+ 
+
+    <!-- Bootstrap core CSS -->
+    <!-- Custom styles for this template -->
+
+    <link href="../../Content/Bootstrap/posts/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../Content/Bootstrap/posts/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../Content/Bootstrap/posts/css/blog-home.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="css/blog-home.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+    <!-- Page Content -->
+    <div class="container">
+        @for (int i = 0; i < Model.Count(); i++)
+        {
+
+            <div class="row">
+
+                <!-- Blog Entries Column -->
+                <div class="col-md-8">
+
+                    <h1 class="my-4">
+                        @Model.ElementAt(i).title
+
+                    </h1>
+
+                    <!-- Blog Post -->
+                    <div class="card mb-4">
+                        <a href="@Url.Content("~/Spot/Details?id="+Model.ElementAt(i).Id)">  <img class="card-img-top" src="@Url.Content("~/Content/SpotImages/" + ViewBag.Photos[i] )" alt="Card image cap"> </a>
+                        <div class="card-body">
+
+
+                            <a href="@Url.Content("~/Spot/Details?id="+Model.ElementAt(i).Id)" class="btn btn-primary">Read More &rarr;</a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Posted By
+                            <a href="#">@Model.ElementAt(i).author</a>
+                        </div>
+                    </div>
+
+                    <!-- Blog Post -->
+
+                </div>
+
+            </div>
+            <hr />
+        }
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+    <!-- Footer -->
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

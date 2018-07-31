@@ -316,6 +316,21 @@ namespace SpotMapProject.Controllers
             dbcon.DeleteCommentByID(id,spot_id);
             return RedirectToAction("Details", new { id = spot_id });
         }
+        public ActionResult ShowAllSpots()
+        {
+            List<AspNetSpot> spots = new List<AspNetSpot>();
+
+            spots = dbcon.GetAllPublicSpots();
+            List<string> photos_paths = new List<string>();
+            foreach (var id in spots)
+            {
+                photos_paths.Add(dbcon.GetAllSpotPhotosByID(id.Id.ToString()).ElementAt(0));
+            }
+            ViewBag.Photos = photos_paths;
+
+
+            return View(spots);
+        }
 
     }
 }
