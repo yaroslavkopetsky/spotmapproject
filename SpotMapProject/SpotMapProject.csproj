@@ -205,10 +205,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="ChatHub.cs" />
     <Compile Include="ChatWebSocketMiddleware.cs" />
+    <Compile Include="Class1.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ChatRoomController.cs" />
     <Compile Include="Controllers\DataBaseController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Content Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\SpotController.cs" />
@@ -234,6 +237,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AspNetActionControlModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AspNetChatMessage.cs">
+      <DependentUpon>ChatMessagesModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AspNetPhotoModel.Context.cs">
       <AutoGen>True</AutoGen>
@@ -288,6 +294,21 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AspNetUsersModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChatMessagesModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChatMessagesModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChatMessagesModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChatMessagesModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ChatMessagesModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChatMessagesModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\DetailsViewModel.cs" />
@@ -391,6 +412,16 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Models\ChatMessagesModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChatMessagesModel.edmx</DependentUpon>
+      <LastGenOutput>ChatMessagesModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\ChatMessagesModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChatMessagesModel.edmx</DependentUpon>
+      <LastGenOutput>ChatMessagesModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
@@ -559,6 +590,13 @@
     </Content>
     <Content Include="Scripts\angular.min.js.map" />
     <None Include=".bin\node.cmd" />
+    <EntityDeploy Include="Models\ChatMessagesModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ChatMessagesModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\ChatMessagesModel.edmx.diagram">
+      <DependentUpon>ChatMessagesModel.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -640,6 +678,7 @@
     <Content Include="Views\Users\EditorDetails.cshtml" />
     <Content Include="Views\Users\PostsBy.cshtml" />
     <Content Include="Views\Spot\ShowAllSpots.cshtml" />
+    <Content Include="Views\Home\Chat.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

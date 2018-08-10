@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using SpotMapProject.Controllers;
 using SpotMapProject.Models;
 
@@ -33,7 +35,19 @@ namespace SpotMapProject.Controllers
             ViewBag.SpotId = spot_id;
             ViewBag.Requests = sum;
             ViewBag.Paths = paths;
-            
+            if (User.Identity.IsAuthenticated)
+            {
+                if (HttpContext.Request.Cookies["chat_client"] == null)
+                {
+                    ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
+                    HttpCookie cookie = new HttpCookie("chat_client");
+                    HttpContext.Response.Cookies.Remove("cookie_name");
+                    cookie.Value = user.UserName;
+                    HttpContext.Response.SetCookie(cookie);
+
+                }
+            }
+
             return View();
         }
 
@@ -59,9 +73,15 @@ namespace SpotMapProject.Controllers
             return View();
         }
 
-       
 
 
+        [Authorize]
+        public ActionResult Chat()
+        {
+
+
+            return View();
+        }
 
     }
 }

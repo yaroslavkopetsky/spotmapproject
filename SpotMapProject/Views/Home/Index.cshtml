@@ -63,6 +63,10 @@
                 <ul class="navbar-nav ml-auto">
                     @if (Context.User.Identity.IsAuthenticated)
                     {
+
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="http://localhost:13866/Chat.aspx")">Social<img src="@Url.Content("~/Content/Icons/chat.png")" alt="IMAGES" id="img" /></a>
+                        </li>
                         <li class="nav-item mx-0 mx-lg-1">
                             <a class="nav-link py-3 px-0 px-lg-3 rounded js-scroll-trigger" href="@Url.Content("~/Home/Map")">Show Map <img src="@Url.Content("~/Content/Icons/earth32.png")" alt="IMAGES" id="img" /></a>
                         </li>

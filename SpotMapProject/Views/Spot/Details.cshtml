@@ -178,8 +178,8 @@
                 <hr>
 
 
-                @if (Model.editor ||(Context.User.IsInRole("admin") || Context.User.IsInRole("moder")))
-    
+                @if (Model.editor || (Context.User.IsInRole("admin") || Context.User.IsInRole("moder")))
+
                 {
                     using (Html.BeginForm("UpdateSpot", "Spot", FormMethod.Get))
                     {
@@ -245,81 +245,97 @@
 
 
 
+
+
+
                 }
-                <hr />
-                <br />
-                @using (Html.BeginForm("RateSpot", "Spot", FormMethod.Post))
+                @using (Html.BeginForm("ShowSpot", "Spot", FormMethod.Get))
                 {
                     @Html.AntiForgeryToken()
                     @Html.ValidationSummary(true)
-                    <div class="slidecontainer">
-                        <input type="range" min="1" max="100" value="1" class="slider" id="myRange" name="value" style="font-family:myFirstFont">  <p id="value" name="value"></p>
-                    </div>
 
+                    <p>
 
+                        @Html.Hidden("id", Model.SpotData.Id)
 
+                    </p>
 
-
-
-
-                    @Html.Hidden("value", Request.Form["value"])
-                    @Html.Hidden("id", Model.SpotData.Id)
-
-
-
-
-                    <input type="submit" class="btn btn-primary" value="Rate" />
-                }
-                <p>Rating:@Model.Rating</p>
-
-                <hr />
-                <!-- Comments Form -->
-                @using (Html.BeginForm("AddComment", "Spot", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
-                    @Html.ValidationSummary(true)
-                    @Html.Hidden("id", Model.SpotData.Id)
-                    <div class="card my-4">
-                        <h5 class="card-header">Leave a Comment:</h5>
-                        <div class="card-body">
-                            <form>
-                                <div class="form-group">
-                                    <textarea class="form-control" rows="3" name="text"></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                }
-                <!-- Single Comment -->
-                <hr />
-
-                @for (int i = 0; i < Model.SpotComments.Count; i++)
-                {
-                    
-                <div class="media mb-4">
-                    <img class="d-flex mr-3 rounded-circle" src="@Url.Content("~/Content/UserImages/user.png")" alt="">
-                    <div class="media-body">
-                        <h4 class="mt-0">@Model.Usernames[i]</h4>
-                        <h5>@Model.Date[i]</h5>
-                        @Model.SpotComments[i]
-                    </div>
-                    @if (Model.Usernames[i] == ViewBag.Username)
-                    {
-                        @Html.Hidden("spot_id", Model.SpotData.Id);
-                        @Html.Hidden("id", i);
-                       <a href="@Url.Content("~/Spot/DeleteCommentByID?id="+i+"&spot_id="+Model.SpotData.Id)"> <input type="submit" value="Delete Comment" class="btn btn-danger" /></a>
+                    <input type="submit" value="Show on Map" class="btn btn-info" />
                     }
-                </div>
+                    <hr />
+                    <br />
+                    @using (Html.BeginForm("RateSpot", "Spot", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        <div class="slidecontainer">
+                            <input type="range" min="1" max="100" value="1" class="slider" id="myRange" name="value" style="font-family:myFirstFont">  <p id="value" name="value"></p>
+                        </div>
+
+
+
+
+
+
+
+                        @Html.Hidden("value", Request.Form["value"])
+                        @Html.Hidden("id", Model.SpotData.Id)
+
+
+
+
+                        <input type="submit" class="btn btn-primary" value="Rate" />
+                    }
+                    <p>Rating:@Model.Rating</p>
+
+                    <hr />
+                    <!-- Comments Form -->
+                    @using (Html.BeginForm("AddComment", "Spot", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
+                        @Html.Hidden("id", Model.SpotData.Id)
+                        <div class="card my-4">
+                            <h5 class="card-header">Leave a Comment:</h5>
+                            <div class="card-body">
+                                <form>
+                                    <div class="form-group">
+                                        <textarea class="form-control" rows="3" name="text"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                    <!-- Single Comment -->
+                    <hr />
+
+                    @for (int i = 0; i < Model.SpotComments.Count; i++)
+                    {
+
+                        <div class="media mb-4">
+                            <img class="d-flex mr-3 rounded-circle" src="@Url.Content("~/Content/UserImages/user.png")" alt="">
+                            <div class="media-body">
+                                <h4 class="mt-0">@Model.Usernames[i]</h4>
+                                <h5>@Model.Date[i]</h5>
+                                @Model.SpotComments[i]
+                            </div>
+                            @if (Model.Usernames[i] == ViewBag.Username)
+                            {
+                                @Html.Hidden("spot_id", Model.SpotData.Id);
+                                @Html.Hidden("id", i);
+                                <a href="@Url.Content("~/Spot/DeleteCommentByID?id="+i+"&spot_id="+Model.SpotData.Id)"> <input type="submit" value="Delete Comment" class="btn btn-danger" /></a>
+                            }
+                        </div>
                         <hr>
-                   
-                
-                }
-
-                <!-- Comment with nested comments -->
 
 
-            </div>
+                    }
+
+                    <!-- Comment with nested comments -->
+
+
+                </div>
 
             <!-- Sidebar Widgets Column -->
           

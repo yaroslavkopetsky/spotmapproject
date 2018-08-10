@@ -26,6 +26,7 @@ namespace SpotMapProject.Controllers
         private AspNetPhotoEntity spotphoto_entity = new AspNetPhotoEntity();
         private FavoriteSpotEntity spotfav_entity = new FavoriteSpotEntity();
         private ActionControlEntities action_ctrl = new ActionControlEntities();
+        private ChatMessagesEntities chatMsg_entities = new ChatMessagesEntities();
 
         /// <summary>
         /// Adds Spot To Map 
@@ -238,8 +239,8 @@ namespace SpotMapProject.Controllers
             int num1 = 0;
             if (Int32.TryParse(value, out num1))
             {
-                
-                if (value != null && num1>=0 && num1 <=100)
+
+                if (value != null && num1 >= 0 && num1 <= 100)
                 {
                     ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
 
@@ -401,7 +402,7 @@ namespace SpotMapProject.Controllers
         public void DeleteSpotFromFavoriteTable(string id)
         {
             List<AspNetSpotFavorite> fav = spotfav_entity.AspNetSpotFavorites.Where(x => x.spot_id == id).ToList();
-            foreach(AspNetSpotFavorite f in fav)
+            foreach (AspNetSpotFavorite f in fav)
             {
                 spotfav_entity.AspNetSpotFavorites.Remove(f);
             }
@@ -412,7 +413,7 @@ namespace SpotMapProject.Controllers
         public void DeleteSpotPhotos(string id)
         {
             List<AspNetSpotPhoto> photos = spotphoto_entity.AspNetSpotPhotos.Where(x => x.spot_id == id).ToList();
-            foreach(AspNetSpotPhoto p in photos)
+            foreach (AspNetSpotPhoto p in photos)
             {
                 spotphoto_entity.AspNetSpotPhotos.Remove(p);
             }
@@ -426,18 +427,18 @@ namespace SpotMapProject.Controllers
             spots_ed = spotreq_entity.AspNetSpotEdits.Where(x => x.spot_id == id).ToList();
             foreach (AspNetSpotEdit sp in spots_ed)
             {
-               spotreq_entity.AspNetSpotEdits.Remove(sp);
+                spotreq_entity.AspNetSpotEdits.Remove(sp);
             }
             spotreq_entity.SaveChanges();
         }
 
         public void DeleteSpotComments(string id)
         {
-            
+
             List<AspNetSpotComment> spots_comm = new List<AspNetSpotComment>();
             int ID = Convert.ToInt32(id);
             spots_comm = spotcom_entity.AspNetSpotComments.Where(x => x.spot_id == id).ToList();
-            foreach(AspNetSpotComment sp in spots_comm)
+            foreach (AspNetSpotComment sp in spots_comm)
             {
                 spotcom_entity.AspNetSpotComments.Remove(sp);
             }
@@ -490,9 +491,9 @@ namespace SpotMapProject.Controllers
             ApplicationUser user = System.Web.HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>().FindById(System.Web.HttpContext.Current.User.Identity.GetUserId());
             List<AspNetSpotEdit> ed = new List<AspNetSpotEdit>();
             ed = spotreq_entity.AspNetSpotEdits.Where(x => x.username == user.UserName && x.spot_id == id).ToList();
-            if (ed.Count > 0){
+            if (ed.Count > 0) {
 
-                
+
             }
             else
             {
@@ -506,17 +507,17 @@ namespace SpotMapProject.Controllers
 
                 spotreq_entity.AspNetSpotEdits.Add(edit);
                 spotreq_entity.SaveChanges();
-               
+
             }
             return ed.Count;
         }
 
-       public void AcceptUserEditRequest(string id)
+        public void AcceptUserEditRequest(string id)
         {
 
             int iD = Convert.ToInt32(id);
-          AspNetSpotEdit edit = spotreq_entity.AspNetSpotEdits.FirstOrDefault(x => x.Id == iD);
-            if (edit != null ){
+            AspNetSpotEdit edit = spotreq_entity.AspNetSpotEdits.FirstOrDefault(x => x.Id == iD);
+            if (edit != null) {
                 edit.active = true;
                 spotreq_entity.SaveChanges();
             }
@@ -598,7 +599,7 @@ namespace SpotMapProject.Controllers
 
         public int GetLastFavoriteID()
         {
-           
+
             int max = Convert.ToInt32(spotfav_entity.AspNetSpotFavorites.Max(p => p.Id));
             return max;
         }
@@ -609,7 +610,7 @@ namespace SpotMapProject.Controllers
             List<AspNetSpotFavorite> fav = new List<AspNetSpotFavorite>();
             List<AspNetSpot> fav_spots = new List<AspNetSpot>();
             fav = spotfav_entity.AspNetSpotFavorites.Where(x => x.username == user.UserName).ToList();
-            foreach(AspNetSpotFavorite f in fav)
+            foreach (AspNetSpotFavorite f in fav)
             {
                 int buff = Convert.ToInt32(f.spot_id);
                 fav_spots.AddRange(spot_entity.AspNetSpots.Where(x => x.Id == buff).ToList());
@@ -679,7 +680,7 @@ namespace SpotMapProject.Controllers
         }
 
         public List<AspNetSpot> GetRandomSpotsByAmount(int amount)
-       {
+        {
             if (GetAllPublicSpotsCount() > amount)
             {
                 Random rand = new Random();
@@ -708,7 +709,7 @@ namespace SpotMapProject.Controllers
             {
                 path = "default.png";
             }
-           
+
             return path;
         }
 
@@ -732,11 +733,11 @@ namespace SpotMapProject.Controllers
             }
         }
 
-        public void DeleteCommentByID(string id,string spot_id)
+        public void DeleteCommentByID(string id, string spot_id)
         {
             List<AspNetSpotComment> comment = new List<AspNetSpotComment>();
-             comment.AddRange(spotcom_entity.AspNetSpotComments.Where(x=>x.spot_id == spot_id).ToList());
-            if(comment[0]!=null)
+            comment.AddRange(spotcom_entity.AspNetSpotComments.Where(x => x.spot_id == spot_id).ToList());
+            if (comment[0] != null)
             {
                 comment.Reverse();
                 int ID = Convert.ToInt32(id);
@@ -761,7 +762,7 @@ namespace SpotMapProject.Controllers
             List<string> Usernames = new List<string>();
             List<string> GroupedUsernames = new List<string>();
 
-           
+
 
             Usernames = spotreq_entity.AspNetSpotEdits.Select(x => x.username).ToList();
 
@@ -769,9 +770,9 @@ namespace SpotMapProject.Controllers
             foreach (string name in Usernames)
             {
                 int counter = 0;
-                for(int i = 0; i< GroupedUsernames.Count; i++)
+                for (int i = 0; i < GroupedUsernames.Count; i++)
                 {
-                    if(GroupedUsernames.ElementAt(i) == name)
+                    if (GroupedUsernames.ElementAt(i) == name)
                     {
 
                     }
@@ -780,16 +781,16 @@ namespace SpotMapProject.Controllers
                         counter++;
                     }
                 }
-                if(counter == GroupedUsernames.Count)
+                if (counter == GroupedUsernames.Count)
                 {
-                    counter = 0; 
+                    counter = 0;
                     GroupedUsernames.Add(name);
                 }
 
             }
 
             return GroupedUsernames;
-            
+
         }
 
         /// <summary>
@@ -812,7 +813,7 @@ namespace SpotMapProject.Controllers
         /// </summary>
         /// <param name="username"></param>
         /// <param name="spot_id"></param>
-        public void DeleteEditorFromSpot(string username , string spot_id)
+        public void DeleteEditorFromSpot(string username, string spot_id)
         {
             try
             {
@@ -835,8 +836,37 @@ namespace SpotMapProject.Controllers
 
             return spot_entity.AspNetSpots.Where(x => x.author == username && x.visible == true && x.@public == true).ToList();
         }
-       
-      
+
+
+        public int getLastMessageID()
+        {
+
+            int max = Convert.ToInt32(chatMsg_entities.AspNetChatMessages.Max(p => p.Id));
+            return max;
+
+
+        }
+
+        public void AddMessage(string text, string username)
+        {
+
+            AspNetChatMessage msg = new AspNetChatMessage();
+            msg.Id = getLastMessageID() + 1;
+            msg.username = username;
+            msg.text = text;
+            chatMsg_entities.AspNetChatMessages.Add(msg);
+            chatMsg_entities.SaveChanges();
+
+
+        }
+        public List<AspNetChatMessage> GetChatMessages()
+        {
+
+
+            return chatMsg_entities.AspNetChatMessages.ToList();
+
+
+        }
     }
 
 }
