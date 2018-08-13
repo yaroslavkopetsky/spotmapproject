@@ -211,7 +211,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ChatRoomController.cs" />
     <Compile Include="Controllers\DataBaseController.cs" />
-    <Content Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\SpotController.cs" />
@@ -647,7 +647,6 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\Map.cshtml" />
     <Content Include="Views\Users\ShowUsers.cshtml" />
     <Content Include="Views\Role\Index.cshtml" />
     <Content Include="Views\Roles\Create.cshtml" />
@@ -679,6 +678,7 @@
     <Content Include="Views\Users\PostsBy.cshtml" />
     <Content Include="Views\Spot\ShowAllSpots.cshtml" />
     <Content Include="Views\Home\Chat.cshtml" />
+    <Content Include="Views\Home\Map.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
